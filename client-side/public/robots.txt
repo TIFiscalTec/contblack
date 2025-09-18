@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+
+Disallow: /Login/
+Disallow: /Dashboard/
+Disallow: /Cadastro/
+Disallow: /Carrinho/
+Disallow: /Checkout/
+
+Allow: /
