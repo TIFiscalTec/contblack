@@ -89,7 +89,7 @@ const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModal
                                 color="orange"
                                 title="Acessar VIP"
                                 value="Acessórias"
-                                onClick={() => window.open("https://vip.acessorias.com")}
+                                onClick={() => window.open("https://vip.acessorias.com/contblack")}
                             />
                         </Grid>
                         <Grid xs={12} sm={6} md={4} id="duvida">

@@ -145,16 +145,17 @@ const Login = () => {
                                 variant="contained"
                                 sx={{
                                     padding: "5px 28px",
-                                    fontSize: "1rem",
-                                    backgroundColor: "#ffc845", // amarelo
-                                    color: "#0b243d", // azul escuro
-                                    borderRadius: "10px",
-                                    boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                    backgroundColor: "#9C01B9",
+                                    borderRadius: "17px 0 17px 0",
+                                    fontSize: "0.7rem",
+                                    color: "white",
+                                    fontWeight: 800,
                                     transition: "0.3s ease",
                                     '&:hover': {
-                                        backgroundColor: "#e6b53e", // amarelo mais escuro
-                                        transform: "scale(1.05)",
-                                    },
+                                        backgroundColor: "#1EFF86",
+                                        boxShadow: "0 4px 10px #1EFF86",
+
+                                    }
                                 }}
                             >
                                 Entrar
@@ -176,7 +177,7 @@ const Login = () => {
                             boxSizing: "border-box"
                         }}
                     >
-                        <h2 style={{ color: "#ffc845" }}>Primeira vez aqui?</h2>
+                        <h2 style={{ color: "#1EFF86" }}>Primeira vez aqui?</h2>
                         <p style={{ margin: "20px 0", color: "#fff" }}>
                             Escolha um plano que se encaixe nas suas necessidades e cadastre-se para acessar todos os nossos serviços contábeis especializados.
                         </p>
@@ -187,15 +188,16 @@ const Login = () => {
                                 padding: "5px 28px",
                                 width: "100%",
                                 fontSize: "1rem",
-                                backgroundColor: "#ffc845", // amarelo
-                                color: "#0b243d", // azul escuro
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                backgroundColor: "#9C01B9",
+                                borderRadius: "17px 0 17px 0",
+                                color: "white",
+                                fontWeight: 800,
                                 transition: "0.3s ease",
                                 '&:hover': {
-                                    backgroundColor: "#e6b53e",
-                                    transform: "scale(1.05)",
-                                },
+                                    backgroundColor: "#1EFF86",
+                                    boxShadow: "0 4px 10px #1EFF86",
+
+                                }
                             }}
                         >
                             Ver Planos

@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { motion } from "framer-motion";
 import Footer from "../components/Footer";
+import AddIcon from '@mui/icons-material/Add';
+import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
+
 
 // Componente de card isolado
-const NicheCard = ({ title, description }) => {
+const NicheCard = ({ title, description, link }) => {
     const [hovered, setHovered] = useState(false);
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [])
 
     return (
+//         9C01B9
+// 1EFF86
         <motion.div
             style={{
                 width: "200px",
                 height: "200px",
-                backgroundColor: "#1EFF86",
+                backgroundColor: link ? "#9C01B9" : "#1EFF86",
                 borderRadius: "10px",
                 cursor: "pointer",
                 position: "relative",
@@ -24,6 +29,7 @@ const NicheCard = ({ title, description }) => {
                 transition: "transform 0.3s ease, box-shadow 0.3s ease",
                 boxShadow: hovered ? "0 4px 15px rgba(0, 0, 0, 0.3)" : "none",
             }}
+            onClick={() => link ? window.open(link, "_blank") : null}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             initial={{ opacity: 0, y: 50 }}
@@ -33,7 +39,7 @@ const NicheCard = ({ title, description }) => {
         >
             <p
                 style={{
-                    color: "#0b243d",
+                    color: link ? "white" : "black",
                     textAlign: "center",
                     marginTop: "70px",
                     fontWeight: "bold",
@@ -42,6 +48,9 @@ const NicheCard = ({ title, description }) => {
             >
                 {title}
             </p>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50%" }}>
+                <AddIcon sx={{ fontSize: "35px", color: "#0b243d" }} />
+            </div>
             {hovered && (
                 <div
                     style={{
@@ -96,6 +105,11 @@ const Niches = () => {
         {
             title: "Gamers",
             description: "Recebe da gringa? Faz live com donate? Temos planos pensados pra você escalar com segurança.",
+        },
+        {
+            title: "Não encontrou sua categoria?",
+            description: "Clique e fale conosco para saber como podemos ajudar sua profissão.",
+            link: gerarLinkWhatsApp("Olá! Não encontrei minha categoria na lista. Poderiam verificar se atendem minha profissão e me passar mais detalhes?"),
         },
     ];
 
@@ -172,7 +186,7 @@ const Niches = () => {
                     }}
                 >
                     {listNiches.map((niche, index) => (
-                        <NicheCard key={index} title={niche.title} description={niche.description} />
+                        <NicheCard key={index} title={niche.title} description={niche.description} link={niche.link ? niche.link : ""} />
                     ))}
                 </div>
             </div>

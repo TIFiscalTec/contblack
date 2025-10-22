@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+
 
 
 function Header(props) {
@@ -9,6 +11,7 @@ function Header(props) {
     const [showHeader, setShowHeader] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [menuOpen, setMenuOpen] = useState(false);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const handleScroll = () => {
@@ -108,8 +111,10 @@ function Header(props) {
                     >
                         <p className="menu-button" style={{ color: "#fff"}}>DÚVIDAS</p>
                     </a>
-                    <p className="menu-button" onClick={() => navigate("../SobreNos")}
-                        style={{ color:"#fff" }}>BLOG</p>
+                    {/* <p className="menu-button" onClick={() => navigate("../SobreNos")}
+                        style={{ color:"#fff" }}>BLOG</p> */}
+                    <PersonOutlineIcon className="menu-button" style={{ color: "#fff", display: token ? "none" : "block", fontSize: "20px" }} onClick={() => navigate("../Login")} />
+
                 </div>
             </div>
 

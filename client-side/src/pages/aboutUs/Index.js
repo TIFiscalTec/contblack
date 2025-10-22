@@ -16,11 +16,11 @@ const AboutUs = () => {
 
             {/* Seção Missão */}
             <div style={{
-                marginTop: "60px",
+                marginTop: "80px",
                 width: "100%",
                 padding: "20px",
                 backgroundColor: "white",
-                color: "#0b243d"
+                color: "#0b243d",
             }}>
                 <div style={{
                     marginTop: "20px",
@@ -44,7 +44,7 @@ const AboutUs = () => {
                         <img
                             src="/assets/sobreNos.jpg"
                             alt="Descrição"
-                            style={{ width: "100%", height: "auto", borderRadius: "50%" }}
+                            style={{ width: "80%", height: "auto", borderRadius: "44px 0 44px 0" }}
                         />
                     </motion.div>
 
@@ -116,7 +116,7 @@ const AboutUs = () => {
                         transition={{ duration: 0.8, type: "spring", stiffness: 100, damping: 12 }}
                         viewport={{ once: true }}
                     >
-                        <img src="/assets/pequenos-empresarios-nicho-1.jpg" alt="Descrição" style={{ width: "100%", height: "auto" }} />
+                        <img src="/assets/pequenos-empresarios-nicho-1.jpg" alt="Descrição" style={{ width: "100%", height: "auto", borderRadius: "44px 0 44px 0" }} />
                     </motion.div>
                 </div>
             </div>

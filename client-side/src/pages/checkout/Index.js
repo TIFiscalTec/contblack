@@ -27,6 +27,7 @@ const Checkout = () => {
     const [discountCode, setDiscountCode] = useState("");
     const [discountAvailable, setDiscountAvailable] = useState([]);
     const [discountApplied, setDiscountApplied] = useState(false);
+    const [showBack, setShowBack] = useState(false);
     const [cardData, setCardData] = useState({
         name: "",
         number: "",
@@ -348,6 +349,8 @@ const Checkout = () => {
                                             name="cvv"
                                             value={cardData.cvv}
                                             onChange={handleCardInputChange}
+                                            onFocus={() => setShowBack(true)}  // mostra verso
+                                            onBlur={() => setShowBack(false)}  // volta para frente
                                             fullWidth
                                             helperText={cardErrors.cvv}
                                             error={Boolean(cardErrors.cvv)}
@@ -355,32 +358,100 @@ const Checkout = () => {
                                     </div>
                                 </div>
 
-                                {/* Visual do cartão */}
-                                <div style={{
-                                    flex: 1,
-                                    background: "#285943",
-                                    color: "white",
-                                    padding: "20px",
-                                    borderRadius: "12px",
-                                    minHeight: "180px",
-                                    maxWidth: "400px",
-                                    display: isMobile ? "none" : "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "space-between",
-                                    boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-                                    fontFamily: "monospace"
-                                }}>
-                                    <div style={{ fontSize: "0.9rem" }}>CARTÃO DE CRÉDITO</div>
-                                    <div style={{ fontSize: "1.2rem", letterSpacing: "2px" }}>
-                                        {cardData.number || "0000 0000 0000 0000"}
-                                    </div>
-                                    <div style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "0.9rem"
-                                    }}>
-                                        <span>{cardData.name || "NOME DO TITULAR"}</span>
-                                        <span>{cardData.expiry || "MM/AA"}</span>
+                                {/* Cartão com efeito flip */}
+                                <div
+                                    style={{
+                                        flex: 1,
+                                        perspective: "1000px",
+                                        maxWidth: "400px",
+                                        minHeight: "200px",
+                                        display: isMobile ? "none" : "block",
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                            borderRadius: "12px",
+                                            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                            color: "white",
+                                            fontFamily: "monospace",
+                                            transition: "transform 0.6s",
+                                            transformStyle: "preserve-3d",
+                                            transform: showBack ? "rotateY(180deg)" : "rotateY(0deg)",
+                                            position: "relative",
+                                        }}
+                                    >
+                                        {/* Frente do cartão */}
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                width: "100%",
+                                                height: "100%",
+                                                backfaceVisibility: "hidden",
+                                                background: "#285943",
+                                                borderRadius: "12px",
+                                                padding: "20px",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "space-between",
+                                            }}
+                                        >
+                                            <div style={{ fontSize: "0.9rem" }}>CARTÃO DE CRÉDITO</div>
+                                            <div style={{ fontSize: "1.2rem", letterSpacing: "2px" }}>
+                                                {cardData.number || "0000 0000 0000 0000"}
+                                            </div>
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    fontSize: "0.9rem",
+                                                }}
+                                            >
+                                                <span>{cardData.name || "NOME DO TITULAR"}</span>
+                                                <span>{cardData.expiry || "MM/AA"}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Verso do cartão */}
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                width: "100%",
+                                                height: "100%",
+                                                backfaceVisibility: "hidden",
+                                                background: "#1e3d2f",
+                                                borderRadius: "12px",
+                                                padding: "20px",
+                                                transform: "rotateY(180deg)",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    background: "#000",
+                                                    height: "40px",
+                                                    marginBottom: "20px",
+                                                    borderRadius: "4px",
+                                                }}
+                                            />
+                                            <div
+                                                style={{
+                                                    alignSelf: "flex-end",
+                                                    background: "#fff",
+                                                    color: "#000",
+                                                    padding: "5px 10px",
+                                                    borderRadius: "6px",
+                                                    fontWeight: "bold",
+                                                    minWidth: "60px",
+                                                    textAlign: "center",
+                                                }}
+                                            >
+                                                {cardData.cvv || "•••"}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

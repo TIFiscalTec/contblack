@@ -12,6 +12,10 @@ body {
   color: black; /* Texto principal azul escuro */
 }
 
+.sectionOne  {
+  margin-top: 20px;
+}
+
 .hero-container {
   width: 100%;
   display: flex;

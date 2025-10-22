@@ -205,32 +205,32 @@ const MudarPlano = () => {
                             }}
                         >
                             <Button onClick={scrollLeft} variant="contained" sx={{
-                                padding: "14px 28px",
-                                fontSize: "1rem",
-                                backgroundColor: "#ffc845",
-                                color: "#0b243d",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                backgroundColor: "#9C01B9",
+                                borderRadius: "17px 0 17px 0",
+                                fontSize: "0.7rem",
+                                color: "white",
+                                fontWeight: 800,
+                                border: "none",
                                 transition: "0.3s ease",
                                 '&:hover': {
-                                    backgroundColor: "#e6b53e",
-                                    transform: "scale(1.05)",
-                                },
+                                    backgroundColor: "#1EFF86",
+                                    boxShadow: "0 4px 10px #1EFF86",
+                                }
                             }}>
                                 ◀
                             </Button>
                             <Button onClick={scrollRight} variant="contained" sx={{
-                                padding: "14px 28px",
-                                fontSize: "1rem",
-                                backgroundColor: "#ffc845",
-                                color: "#0b243d",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                backgroundColor: "#9C01B9",
+                                borderRadius: "0 17px 0 17px",
+                                fontSize: "0.7rem",
+                                color: "white",
+                                fontWeight: 800,
+                                border: "none",
                                 transition: "0.3s ease",
                                 '&:hover': {
-                                    backgroundColor: "#e6b53e",
-                                    transform: "scale(1.05)",
-                                },
+                                    backgroundColor: "#1EFF86",
+                                    boxShadow: "0 4px 10px #1EFF86",
+                                }
                             }}>
                                 ▶
                             </Button>
@@ -263,7 +263,7 @@ const MudarPlano = () => {
                                         borderRadius: "30px",
                                         boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                         padding: "34px 10px",
-                                        backgroundColor: "#f9f2e4",
+                                        backgroundColor: "white",
                                     }}
                                 >
 
@@ -274,19 +274,19 @@ const MudarPlano = () => {
                                         <p style={{ fontSize: "15px", marginRight: "5px" }}>
                                             {Number(plan?.valorAntigoMensal)?.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                         </p>
-                                        <p
-                                            style={{
-                                                fontSize: "13px",
-                                                backgroundColor: "#0b243d",
-                                                padding: "1px 5px",
-                                                borderRadius: "10px",
-                                                color: "white",
-                                            }}
-                                        >
-                                            {plan.descontoMensal ? (
-                                                <>{parseInt(plan.descontoMensal)}%OFF</>
-                                            ) : ("")}
-                                        </p>
+                                        {plan.descontoMensal ? (
+                                            <p
+                                                style={{
+                                                    fontSize: "13px",
+                                                    backgroundColor: "#1EFF86",
+                                                    padding: "1px 5px",
+                                                    borderRadius: "10px",
+                                                    color: "black",
+                                                }}
+                                            >
+                                                <>{`${parseInt(plan.descontoMensal)}%OFF`}</>
+                                            </p>
+                                        ) : ("")}
                                     </div>
                                     <p style={{ fontSize: "25px", textAlign: "center", marginTop: "5px", marginBottom: "5px" }}>
                                         <strong> POR R$ {Number(plan?.valorNovoMensal)?.toFixed(2).replace(".", ",")}</strong>
@@ -295,17 +295,17 @@ const MudarPlano = () => {
                                         <div>
                                             <Button variant="contained" sx={{
                                                 display: plan?.idPlano === user?.plano?.idPlano ? "none" : "block",
-                                                padding: "14px 28px",
-                                                fontSize: "1rem",
-                                                backgroundColor: "#ffc845",
-                                                color: "#0b243d",
-                                                borderRadius: "10px",
-                                                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                                backgroundColor: "#9C01B9",
+                                                borderRadius: "17px 0 17px 0",
+                                                fontSize: "0.9rem",
+                                                color: "white",
+                                                fontWeight: 800,
+                                                border: "none",
                                                 transition: "0.3s ease",
                                                 '&:hover': {
-                                                    backgroundColor: "#e6b53e",
-                                                    transform: "scale(1.05)",
-                                                },
+                                                    backgroundColor: "#1EFF86",
+                                                    boxShadow: "0 4px 10px #1EFF86",
+                                                }
                                             }}
                                                 onClick={() => {
                                                     setIdPlanoEscolhido(plan.idPlano);

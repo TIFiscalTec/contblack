@@ -109,7 +109,7 @@ function HeaderDashboard(props) {
             <Divider />
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => window.open("https://vip.acessorias.com")}>
+                    <ListItemButton onClick={() => window.open("https://vip.acessorias.com/contblack")}>
                         <ListItemIcon>
                             <AppRegistrationIcon sx={{ color: "orange" }} />
                         </ListItemIcon>
@@ -129,7 +129,7 @@ function HeaderDashboard(props) {
     );
 
     return (
-        <div style={{ width: "100%", backgroundColor: "#0b243d", height: "60px", display: "flex", justifyContent: "center", position: "fixed", top: showHeader ? "0" : "-60px", transition: "top 0.3s ease-in-out", zIndex: 1000, }} >
+        <div style={{ width: "100%", backgroundColor: "#233344", height: "60px", display: "flex", justifyContent: "center", position: "fixed", top: showHeader ? "0" : "-60px", transition: "top 0.3s ease-in-out", zIndex: 1000, }} >
             <div style={{ width: "90%", display: "flex", alignItems: "center", padding: "0 20px" }}>
                 <div style={{ width: "90%", display: "flex", alignItems: "center", justifyContent: "flex-start", color: "white" }}>
                     <div onClick={toggleDrawer(true)} style={{ display: "flex", cursor: "pointer", flexDirection: "column", gap: "4px", }} className="menu-toggle" >
@@ -137,9 +137,10 @@ function HeaderDashboard(props) {
                         <span style={{ width: "25px", height: "3px", backgroundColor: "white" }}></span>
                         <span style={{ width: "25px", height: "3px", backgroundColor: "white" }}></span>
                     </div>
-                    <div style={{ marginLeft: "16px", color: "#1EFF86" }}>
+                    {/* <div style={{ marginLeft: "16px", color: "#1EFF86" }}>
                         Contblack
-                    </div>
+                    </div> */}
+                    <img src="/assets/Logo_Contblack_FundoEscuro.png" alt="Contblack Logo" style={{ height: "40px", marginLeft: "16px" }} />
                 </div>
                 <div style={{ color: "white", width: "fit-content", minWidth: "100px" }}>
                     <Tooltip title="Ver perfil">

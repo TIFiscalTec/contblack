@@ -219,11 +219,19 @@ const Register = () => {
             setOpen(false);
             setOpenSnackbarSuccess(true);
             setMensagem("Código de verificação enviado com sucesso!");
-        } else if (response.data.status === "400") {
+        }
+
+        if (response.data.status === "400") {
             setOpen(false);
             setEmailError(true);
             setOpenSnackbarError(true)
             setMensagem("E-mail já cadastrado. Tente outro.");
+        }
+
+        if (response.data.status === 500) {
+            setMensagem("E-mail inválido. Tente novamente.");
+            setOpenSnackbarError(true);
+            setEmailError(true);
         }
 
         return response;
@@ -566,7 +574,7 @@ const Register = () => {
             }
 
             if (typePerson === "pessoaFisica") {
-                if (!cpf.trim()) {
+                if (!cpf.trim() || cpf.length < 14) {
                     setCpfError(true);
                     isValid = false;
                 } else {
@@ -575,7 +583,7 @@ const Register = () => {
             }
 
             if (typePerson === "pessoaJuridica") {
-                if (!cnpj.trim()) {
+                if (!cnpj.trim() || cnpj.length < 18) {
                     setCnpjError(true);
                     isValid = false;
                 } else {
@@ -590,7 +598,7 @@ const Register = () => {
                 }
             }
 
-            if (!telefone.trim()) {
+            if (!telefone.trim() || telefone.length < 14) {
                 setTelefoneError(true);
                 isValid = false;
             } else {
@@ -631,6 +639,14 @@ const Register = () => {
                 isValid = false;
             }
 
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                setMensagem("E-mail inválido. Tente novamente.");
+                setOpenSnackbarError(true);
+                setEmailError(true);
+                isValid = false;
+            }
+
             if (!agreePrivacyPolicy) {
                 setOpenSnackbarError(true);
                 setMensagem("Você deve concordar com a Política de Privacidade para continuar.");
@@ -642,9 +658,11 @@ const Register = () => {
                 if (response.data.status === "400") {
                     setEmailError(true);
                     isValid = false;
-                } else {
-                    setEmailError(false);
-                }
+                } else if (response.data.status === 500) {
+                    setEmailError(true);
+                    isValid = false;
+                } else { }
+                setEmailError(false);
             }
         }
 
@@ -656,7 +674,7 @@ const Register = () => {
         }
 
         if (currentStep === 5) {
-            if (senha !== "") {
+            if (senha !== "" && senha.length >= 6) {
                 setSenhaError(false);
                 if (senhaConfirm !== "") {
                     setSenhaConfirmError(false);
@@ -673,6 +691,8 @@ const Register = () => {
                 }
             } else {
                 setSenhaError(true);
+                setMensagem("A senha deve ter no mínimo 6 caracteres.");
+                setOpenSnackbarError(true);
                 isValid = false;
             }
         }

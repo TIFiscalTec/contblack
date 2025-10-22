@@ -95,7 +95,7 @@ const Planos = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <img src="/assets/planos.jpg" alt="Descrição" style={{ width: "100%", height: "auto", borderRadius: "20px 0 20px 0" }} />
+                        <img src="/assets/planos.jpg" alt="Descrição" style={{ width: "100%", height: "auto", borderRadius: "46px 0 46px 0" }} />
                     </motion.div>
 
                     <motion.div
@@ -143,7 +143,7 @@ const Planos = () => {
                             <img
                                 src={plan.img}
                                 alt={plan.title}
-                                style={{ width: "100%", height: "auto", borderRadius: "25px 0 25px 0" }}
+                                style={{ width: "100%", height: "auto", borderRadius: "44px 0 44px 0" }}
                             />
                         </div>
                     </div>

@@ -129,10 +129,12 @@ const Footer = () => {
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "scale(1.1)";
                                     e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
+
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.transform = "scale(1)";
                                     e.currentTarget.style.boxShadow = "none";
+
                                 }}
                             >
                                 {item.icon}
@@ -159,8 +161,9 @@ const Footer = () => {
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../SobreNos")}>SOBRE NÓS</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANOS</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Solucoes")}>SOLUÇÕES</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("/")}>FALE CONOSCO</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("/")}>TRABALHE CONOSCO</strong>
+                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Nichos")}>NICHOS</strong>
+                        <strong>FALE CONOSCO</strong>
+                        <strong>TRABALHE CONOSCO</strong>
                     </div>
                 </motion.div>
 
@@ -181,6 +184,7 @@ const Footer = () => {
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO STARTER</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO BÁSICO</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO AVANÇADO</strong>
+                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO PLUS+</strong>
                         <strong>ABERTURA DE EMPRESA</strong>
                         <strong>ENTREGA DE DECLARAÇÕES</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Solucoes")}>TROQUE DE CONTADOR</strong>

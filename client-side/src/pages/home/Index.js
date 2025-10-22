@@ -17,6 +17,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { motion, AnimatePresence } from "framer-motion";
 // import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 import SimulacaoImpostos from "../components/SimulacaoImpostos";
+import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 // import { Divider } from "@mui/material";
 
 function Home() {
@@ -98,7 +99,7 @@ function Home() {
                                         boxShadow: "0 4px 10px #1EFF86",
 
                                     }
-                                }} onClick={() => navigate("../SobreNos")}>
+                                }} onClick={() => navigate("../solucoes")}>
                                     Troque de contador
                                 </Button>
                                 <Button size="small" variant="contained" endIcon={<EastIcon />} sx={{
@@ -113,7 +114,7 @@ function Home() {
                                         boxShadow: "0 4px 10px #1EFF86",
 
                                     }
-                                }} onClick={() => navigate("../SobreNos")}>
+                                }} onClick={() => navigate("../planos")}>
                                     Abra sua empresa
                                 </Button>
                             </motion.div>
@@ -124,7 +125,7 @@ function Home() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <img src="/assets/home-img1-1024x963.jpg" alt="Contador" />
+                            <img src="/assets/home-img1-1024x963.jpg" alt="Contador" style={{borderRadius: "44px 0 44px 0"}} />
                         </motion.div>
                     </div>
                 </div>
@@ -286,6 +287,7 @@ function Home() {
                                 boxShadow: "0 4px 10px #1EFF86",
                             }
                         }}
+                        onClick={() => window.open(gerarLinkWhatsApp("Olá, tenho dúvidas sobre qual o melhor plano para mim."))}
                     >
                         Falar com consultor
                     </Button>

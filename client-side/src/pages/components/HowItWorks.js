@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Button from '@mui/material/Button';
+import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 // import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 
 const HowItWorks = () => {
@@ -118,7 +119,9 @@ const HowItWorks = () => {
                         backgroundColor: "#1EFF86",
                         boxShadow: "0 4px 10px #1EFF86",
                     }
-                }}>
+                }}
+                    onClick={() => window.open(gerarLinkWhatsApp("Olá, gostaria de falar com um consultor."))}
+                >
                     falar com um consultor
                 </Button>
             </motion.div>

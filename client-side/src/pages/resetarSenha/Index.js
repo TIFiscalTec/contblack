@@ -41,6 +41,11 @@ const ResetarSenha = () => {
     const handleMouseUpPassword = (e) => e.preventDefault();
 
     const handleSubmit = async () => {
+        if (novaSenha.length < 6) {
+            setMensagem("A senha deve ter no mínimo 6 caracteres.");
+            setOpenSnackbarError(true);
+            return;
+        }
         if (novaSenha !== confirmarSenha) {
             setMensagem("As senhas não conferem.");
             setOpenSnackbarError(true);
@@ -133,17 +138,18 @@ const ResetarSenha = () => {
                             onClick={handleSubmit}
                             variant="contained"
                             sx={{
-                                padding: "8px 28px",
+                                padding: "4px 14px",
                                 fontSize: "1rem",
-                                backgroundColor: "#ffc845",
-                                color: "#0b243d",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                                backgroundColor: "#9C01B9",
+                                borderRadius: "17px 0 17px 0",
+                                color: "white",
+                                fontWeight: 800,
                                 transition: "0.3s ease",
-                                "&:hover": {
-                                    backgroundColor: "#e6b53e",
-                                    transform: "scale(1.05)",
-                                },
+                                '&:hover': {
+                                    backgroundColor: "#1EFF86",
+                                    boxShadow: "0 4px 10px #1EFF86",
+
+                                }
                             }}
                         >
                             Redefinir Senha

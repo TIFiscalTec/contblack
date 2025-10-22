@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router-dom';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import { gerarLinkWhatsApp } from '../../utils/WhatsappLink';
 
 const WhatWeDo = (props) => {
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ const WhatWeDo = (props) => {
                                     backgroundColor: "#1EFF86",
                                     boxShadow: "0 4px 10px #1EFF86",
                                 }
-                            }} onClick={() => navigate("../SobreNos")}>
+                            }} onClick={() => window.open(gerarLinkWhatsApp("Olá, quero abrir minha empresa com a Contblack!"))}>
                                 Abra sua empresa
                             </Button>
                         </div>
@@ -176,13 +177,13 @@ const WhatWeDo = (props) => {
                             maxWidth: "1400px",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "space-between",
+                            justifyContent: "center",
                             gap: "20px",
                             flexWrap: "wrap",
                         }}
                     >
                         {/* Imagem */}
-                        <motion.div
+                        {/* <motion.div
                             className="imagem-bloco"
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -195,7 +196,7 @@ const WhatWeDo = (props) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <img
+                            {/* <img
                                 // src="/assets/ECONOMIA-verde-1024x1024.png"
                                 alt="Ver Planos"
                                 style={{
@@ -204,8 +205,8 @@ const WhatWeDo = (props) => {
                                     objectFit: "contain",
                                     borderRadius: "8px",
                                 }}
-                            />
-                        </motion.div>
+                            /> */}
+                        {/* </motion.div> */}
 
                         {/* Texto + botão */}
                         <motion.div
@@ -246,7 +247,7 @@ const WhatWeDo = (props) => {
                                 backgroundColor: "#1EFF86",
                                 boxShadow: "0 4px 10px #1EFF86",
                             }
-                            }} onClick={() => navigate("../SobreNos")}>
+                            }} onClick={() => navigate("../Planos")}>
                                 Ver os planos
                             </Button>
                         </motion.div>
