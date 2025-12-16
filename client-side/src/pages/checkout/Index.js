@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Checkbox from '@mui/material/Checkbox';
 import {
     Button,
     FormControl,
@@ -18,16 +19,26 @@ import { FormatToBrl } from "../../utils/FormatToBrl";
 import { MascaraCartaoCredito } from "../../utils/MascaraCartaoCredito";
 import { MascaraDataCartaoCredito } from "../../utils/MascaraDataCartaoCredito";
 import { TirarMascara } from "../../utils/TirarMascara";
+import AlertError from "../components/AlertError";
+import AlertSuccess from "../components/AlertSuccess";
 
 const Checkout = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    useEffect(() => {
+        if (!token) {
+            navigate("/cadastro" /* Página de login ou cadastro */);
+        }
+    }, [navigate, token]);
     const [isMobile, setIsMobile] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("BOLETO");
     const [discountCode, setDiscountCode] = useState("");
-    const [discountAvailable, setDiscountAvailable] = useState([]);
     const [discountApplied, setDiscountApplied] = useState(false);
+    // const [isChecked, setIsChecked] = useState(false);
     const [showBack, setShowBack] = useState(false);
+    const [openSnackbarError, setOpenSnackbarError] = useState(false);
+    const [openSnackbarSuccess, setOpenSnackbarSuccess] = useState(false);
+    const [mensagem, setMensagem] = useState("");
     const [cardData, setCardData] = useState({
         name: "",
         number: "",
@@ -42,6 +53,13 @@ const Checkout = () => {
 
     const plano = JSON.parse(localStorage.getItem("planoSelecionado"));
 
+    useEffect(() => {
+        if (!plano) {
+            navigate("/Planos");
+        }
+    }, [navigate, plano]);
+
+
     const [cartItems] = useState(() => {
         if (plano) {
             return [plano];
@@ -54,20 +72,6 @@ const Checkout = () => {
     }, [])
 
     useEffect(() => {
-        const getDiscount = async () => {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/getDiscount`);
-            console.log(response.data.data);
-            if (response.data.status === 200) {
-                setDiscountAvailable(response.data.data);
-            } else {
-                alert("Erro ao buscar descontos disponíveis.");
-            }
-        }
-
-        getDiscount()
-    }, [])
-
-    useEffect(() => {
         const verifyPlan = async () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/hasPlan`, {
                 headers: {
@@ -75,11 +79,12 @@ const Checkout = () => {
                 }
             });
             if (response.data.status === 200) {
-                navigate("../Dashboard")
+                navigate("../Dashboard");
             }
         }
         verifyPlan()
-    }, [navigate, token])
+    }, [navigate, token]);
+
 
     const originalTotal = cartItems.reduce((sum, item) => sum + item.price, 0);
     const total = discountApplied ? originalTotal - (originalTotal * (Number(discountApplied.valorDesconto) / 100)) : originalTotal;
@@ -152,17 +157,15 @@ const Checkout = () => {
         if (paymentMethod === "CREDIT_CARD") {
             errors = validateCardData(cardData);
         }
-        console.log(errors)
         setCardErrors(errors);
         if (errors.valid) {
-            console.log(discountApplied)
             setOpen(true);
             const email = localStorage.getItem("email");
             const token = localStorage.getItem("token");
-            const planoSelecionado = JSON.parse(localStorage.getItem("planoSelecionado"));
-            const idPlano = planoSelecionado.id;
-            const tituloPlano = planoSelecionado.title;
-            const periodicity = planoSelecionado.periodicity;
+
+            const idPlano = plano.id;
+            const tituloPlano = plano.title;
+            const periodicity = plano.periodicity;
             cardData.number = TirarMascara(cardData.number);
 
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/criarAssinatura`, {
@@ -173,39 +176,50 @@ const Checkout = () => {
                 idPlano: idPlano,
                 titulo: tituloPlano,
                 periodicidade: periodicity,
-                descricao: planoSelecionado.description,
+                descricao: plano.description,
                 cardData: paymentMethod === "CREDIT_CARD" ? cardData : null
             }, {
                 headers: { Authorization: token }
             });
 
-            console.log(response.data)
-
             if (response.data.status === 200) {
                 setOpen(false);
                 await fetchUser();
-                navigate("/Dashboard");
+                navigate("../apresentacao-contblack");
             } else {
                 setOpen(false);
-                alert("Erro ao processar pagamento.");
+                setMensagem("Erro ao processar pagamento. Tente novamente.");
+                setOpenSnackbarError(true);
             }
         }
     };
 
-    const applyDiscount = () => {
-        for (let i = 0; i < discountAvailable.length; i++) {
-            if (discountCode.toUpperCase() === discountAvailable[i].discountCode.toUpperCase()) {
-                setDiscountApplied(discountAvailable[i]);
-                alert("Cupom aplicado com sucesso!");
-                return;
-            }
+    const applyDiscount = async () => {
+
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/aplicarDesconto`, {
+            codigo: discountCode
+        }, {
+            headers: { Authorization: token },
+        });
+
+        if (response.data.status === 200) {
+            setDiscountApplied(response.data.desconto);
+            setMensagem("Desconto aplicado com sucesso!");
+            setOpenSnackbarSuccess(true);
+            return;
+        } else {
+            setMensagem("Cupom inválido.");
+            setOpenSnackbarError(true);
         }
-        alert("Cupom inválido.");
     };
 
     const handleCardInputChange = (e) => {
         setCardData({ ...cardData, [e.target.name]: e.target.value });
     };
+
+    // const handleCheck = (e) => {
+    //     setIsChecked(e.target.checked);
+    // }
 
     return (
         <>
@@ -233,15 +247,16 @@ const Checkout = () => {
                                 borderBottom: "1px solid #ccc"
                             }}>
                                 <span>{item.title}</span>
-                                <span>R$ {item.price.toFixed(2).replace(".", ",")}</span>
+                                <span>R$ {item.price.toFixed(2).replace(".", ",")} / mês</span>
                             </div>
                         ))}
 
                         {/* Cupom de desconto */}
                         <div style={{ marginTop: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
                             <TextField
-                                key={discountApplied ? "applied" : "not_applied"}
+                                disabled={discountApplied !== false}
                                 label="Cupom de Desconto"
+                                autoComplete="off"
                                 size="small"
                                 value={discountCode}
                                 onChange={(e) => setDiscountCode(e.target.value)}
@@ -249,10 +264,21 @@ const Checkout = () => {
                             <Button
                                 variant="outlined"
                                 onClick={applyDiscount}
-                                disabled={discountApplied}
+                                disabled={discountApplied !== false}
                                 sx={{
-                                    height: "40px",
-                                    backgroundColor: discountApplied ? "#d3ffd3" : undefined
+                                    padding: "8px 24px",
+                                    borderRadius: "17px 0 17px 0",
+                                    borderColor: "#9C01B9",
+                                    fontSize: "0.8rem",
+                                    color: "white",
+                                    backgroundColor: discountApplied ? "#d3ffd3" : "#9C01B9",
+                                    fontWeight: 800,
+                                    transition: "0.3s ease",
+                                    '&:hover': {
+                                        backgroundColor: "#1EFF86",
+                                        boxShadow: "0 4px 10px #1EFF86",
+                                        borderColor: "#1EFF86",
+                                    }
                                 }}
                             >
                                 Aplicar
@@ -265,7 +291,7 @@ const Checkout = () => {
                             marginTop: "15px"
                         }}>
                             <span>Desconto:</span>
-                            <p style={{ color: "red" }}>- {FormatToBrl(cartItems[0].price * (Number(discountApplied.valorDesconto) / 100))}</p>
+                            <p style={{ color: "red" }}>- {FormatToBrl(cartItems[0]?.price * (Number(discountApplied.valorDesconto) / 100))}</p>
                         </div>
                         <div style={{
                             display: "flex",
@@ -293,14 +319,23 @@ const Checkout = () => {
                         </FormControl>
 
                         {paymentMethod === "CREDIT_CARD" && (
-                            <div style={{
-                                marginTop: "20px",
-                                display: "flex",
-                                flexDirection: isMobile ? "column" : "row",
-                                gap: "20px"
-                            }}>
+                            <div
+                                style={{
+                                    marginTop: "20px",
+                                    display: "flex",
+                                    flexDirection: isMobile ? "column" : "row",
+                                    gap: "20px",
+                                }}
+                            >
                                 {/* Formulário */}
-                                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "15px" }}>
+                                <div
+                                    style={{
+                                        flex: 1,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "15px",
+                                    }}
+                                >
                                     <TextField
                                         label="Nome no Cartão"
                                         fullWidth
@@ -312,6 +347,7 @@ const Checkout = () => {
                                         helperText={cardErrors.name}
                                         error={Boolean(cardErrors.name)}
                                     />
+
                                     <TextField
                                         label="Número do Cartão"
                                         fullWidth
@@ -324,11 +360,14 @@ const Checkout = () => {
                                         helperText={cardErrors.number}
                                         error={Boolean(cardErrors.number)}
                                     />
-                                    <div style={{
-                                        display: "flex",
-                                        flexDirection: isMobile ? "column" : "row",
-                                        gap: "15px"
-                                    }}>
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: isMobile ? "column" : "row",
+                                            gap: "15px",
+                                        }}
+                                    >
                                         <TextField
                                             label="Validade (MM/AAAA)"
                                             size="small"
@@ -341,6 +380,7 @@ const Checkout = () => {
                                             helperText={cardErrors.expiry}
                                             error={Boolean(cardErrors.expiry)}
                                         />
+
                                         <TextField
                                             label="CVV"
                                             size="small"
@@ -356,6 +396,16 @@ const Checkout = () => {
                                             error={Boolean(cardErrors.cvv)}
                                         />
                                     </div>
+
+                                    {/* <FormControlLabel
+                                        sx={{ width: "fit-content" }}
+                                        control={<Checkbox />}
+                                        label={
+                                            <span style={{ fontSize: "0.9rem", userSelect: "none" }}>
+                                                O titular do cartão é diferente do cadastro?
+                                            </span>
+                                        }
+                                    /> */}
                                 </div>
 
                                 {/* Cartão com efeito flip */}
@@ -389,7 +439,7 @@ const Checkout = () => {
                                                 width: "100%",
                                                 height: "100%",
                                                 backfaceVisibility: "hidden",
-                                                background: "#285943",
+                                                background: "linear-gradient(135deg, #000000ff, #0a1a12d3)",
                                                 borderRadius: "12px",
                                                 padding: "20px",
                                                 display: "flex",
@@ -420,7 +470,7 @@ const Checkout = () => {
                                                 width: "100%",
                                                 height: "100%",
                                                 backfaceVisibility: "hidden",
-                                                background: "#1e3d2f",
+                                                background: "#0a1a12d3",
                                                 borderRadius: "12px",
                                                 padding: "20px",
                                                 transform: "rotateY(180deg)",
@@ -456,6 +506,47 @@ const Checkout = () => {
                                 </div>
                             </div>
                         )}
+                        {/* {isChecked && (
+                            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "15px", marginTop: "20px" }}>
+                                <TextField
+                                    label="E-mail do Titular"
+                                    fullWidth
+                                    size="small"
+                                    placeholder="exemplo@gmail.com"
+                                    name="email"
+                                />
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: isMobile ? "column" : "row",
+                                    gap: "15px"
+                                }}>
+                                    <TextField
+                                        label="CPF ou CNPJ do Titular"
+                                        size="small"
+                                        fullWidth
+                                        placeholder="xxx.xxx.xxx-xx ou xx.xxx.xxx/xxxx-xx"
+                                        inputProps={{ maxLength: 18 }}
+                                        name="document"
+                                    />
+                                    <TextField
+                                        label="CEP do Titular"
+                                        size="small"
+                                        fullWidth
+                                        placeholder="xxxxx-xxx"
+                                        inputProps={{ maxLength: 10 }}
+                                        name="cep"
+                                    />
+                                    <TextField
+                                        label="Telefone do Titular"
+                                        size="small"
+                                        fullWidth
+                                        placeholder="(xx) xxxxx-xxxx"
+                                        inputProps={{ maxLength: 15 }}
+                                        name="phone"
+                                    />
+                                </div>
+                            </div>
+                        )} */}
                     </div>
 
                     {/* Política e botão */}
@@ -470,7 +561,7 @@ const Checkout = () => {
                         <div style={{ flex: 1 }}>
                             <Typography variant="body2" color="textSecondary">
                                 Seus dados serão utilizados para processar a compra, melhorar sua experiência e conforme nossa{" "}
-                                <a href="/politica-de-privacidade" target="_blank" style={{ color: "#285943", textDecoration: "underline" }}>
+                                <a href="/politica-de-privacidade" target="_blank" style={{ color: "linear-gradient(135deg, #1e3d2f, #14532d)", textDecoration: "underline" }}>
                                     política de privacidade
                                 </a>.
                             </Typography>
@@ -479,7 +570,8 @@ const Checkout = () => {
                             variant="contained"
                             onClick={handleFinishOrder}
                             sx={{
-                                padding: "10px 28px",
+                                marginTop: "10px",
+                                padding: "8px 24px",
                                 backgroundColor: "#9C01B9",
                                 borderRadius: "17px 0 17px 0",
                                 fontSize: "0.7rem",
@@ -500,6 +592,8 @@ const Checkout = () => {
             </div>
             <Footer />
             <Loading open={open} />
+            <AlertError openSnackbarError={openSnackbarError} setOpenSnackbarError={setOpenSnackbarError} mensagem={mensagem} />
+            <AlertSuccess openSnackbarSuccess={openSnackbarSuccess} setOpenSnackbarSuccess={setOpenSnackbarSuccess} mensagem={mensagem} />
         </>
     );
 };

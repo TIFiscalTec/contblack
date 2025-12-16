@@ -45,7 +45,7 @@ const WhatWeDo = (props) => {
                     >
                         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                             <div>
-                                <h1 style={{ fontSize: "1.9rem", lineHeight: "1.3", marginBottom: "10px", color: "#0b243d" }}>
+                                <h1 style={{ fontSize: "2.3rem", lineHeight: "1.3", marginBottom: "10px", color: "#0b243d" }}>
                                     <b style={{ color: "#9C01B9" }}>Deixamos sua contabilidade em dia</b> <b style={{ color: "#1EFF86" }}>#SemContabiliquês</b>
                                 </h1>
                             </div>
@@ -55,6 +55,8 @@ const WhatWeDo = (props) => {
                             <Button size="small" variant="contained" endIcon={<WhatsAppIcon />} sx={{
                                 backgroundColor: "#9C01B9",
                                 borderRadius: "17px 0 17px 0",
+                                padding: "7px 14px",
+
                                 fontSize: "0.7rem",
                                 color: "white",
                                 fontWeight: 800,
@@ -237,16 +239,16 @@ const WhatWeDo = (props) => {
                             </h1>
                             <Button size="small" variant="contained" sx={{
                                 backgroundColor: "#9C01B9",
-                            borderRadius: "17px 0 17px 0",
-                            fontSize: "0.7rem",
-                            color: "white",
-                            fontWeight: 800,
-                            border: "none",
-                            transition: "0.3s ease",
-                            '&:hover': {
-                                backgroundColor: "#1EFF86",
-                                boxShadow: "0 4px 10px #1EFF86",
-                            }
+                                borderRadius: "17px 0 17px 0",
+                                fontSize: "0.7rem",
+                                color: "white",
+                                fontWeight: 800,
+                                border: "none",
+                                transition: "0.3s ease",
+                                '&:hover': {
+                                    backgroundColor: "#1EFF86",
+                                    boxShadow: "0 4px 10px #1EFF86",
+                                }
                             }} onClick={() => navigate("../Planos")}>
                                 Ver os planos
                             </Button>

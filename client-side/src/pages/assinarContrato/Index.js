@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Button, CircularProgress, Alert, Box, Typography } from "@mui/material";
+import { CircularProgress, Alert, Box, Typography } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useLogin } from "../../contexts/LoginContext";
 
 const AssinarContrato = () => {
-    
+
     const navigate = useNavigate();
     const { login, loading } = useLogin();
     console.log("Login data:", login);
     const [contrato, setContrato] = useState(null);
     const [error, setError] = useState(null);
-    const [assinando, setAssinando] = useState(false);
+    // const [assinando, setAssinando] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -21,6 +21,7 @@ const AssinarContrato = () => {
 
     useEffect(() => {
         let mounted = true;
+        let interval;
 
         const getContrato = async () => {
             console.log("Fetching contrato for user:", login);
@@ -34,6 +35,7 @@ const AssinarContrato = () => {
                 if (!mounted) return;
 
                 if (response.data.data?.status === "signed") {
+                    clearInterval(interval); // para o polling
                     navigate("/carrinho");
                 } else {
                     setContrato(response.data.data || null);
@@ -44,25 +46,29 @@ const AssinarContrato = () => {
                 }
             }
         };
+
         if (login) {
-            getContrato();
+            getContrato(); // primeira chamada imediata
+            interval = setInterval(getContrato, 5000); // repete a cada 5s
         }
 
         return () => {
             mounted = false;
+            if (interval) clearInterval(interval);
         };
     }, [login, navigate]);
 
-    const handleAssinar = async () => {
-        try {
-            setAssinando(true);
-            window.open(contrato.sign_url, "_blank");
-        } catch (err) {
-            setError("Erro ao abrir contrato para assinatura.");
-        } finally {
-            setAssinando(false);
-        }
-    };
+
+    // const handleAssinar = async () => {
+    //     try {
+    //         setAssinando(true);
+    //         window.open(contrato.sign_url, "_blank");
+    //     } catch (err) {
+    //         setError("Erro ao abrir contrato para assinatura.");
+    //     } finally {
+    //         setAssinando(false);
+    //     }
+    // };
 
     if (loading) {
         return (
@@ -75,7 +81,7 @@ const AssinarContrato = () => {
     return (
         <>
             <Header active="cart" />
-            <Box sx={{ mt: 15, px: 2, minHeight: "100vh" }}>
+            <Box sx={{ mt: 15, px: 2, minHeight: "100vh", marginBottom: 4 }}>
                 <Box
                     sx={{
                         width: { xs: "100%", md: "80%" },
@@ -99,7 +105,7 @@ const AssinarContrato = () => {
                         </Alert>
                     )}
 
-                    <Box sx={{ mt: 3 }}>
+                    {/* <Box sx={{ mt: 3 }}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -108,7 +114,26 @@ const AssinarContrato = () => {
                         >
                             {!contrato ? "Carregando ..." : "Assinar Contrato"}
                         </Button>
-                    </Box>
+                    </Box> */}
+                    {contrato ? (
+                    <div style={{ width: "100%", height: "90vh", padding: "20px" }}>
+                        <iframe
+                            src={contrato ? contrato.sign_url : ""}
+                            title="Assinatura do Documento"
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                border: "none",
+                                borderRadius: "8px",
+                            }}
+                        />
+                    </div>
+
+                    ) : (
+                        <Box sx={{ mt: 10, textAlign: "center" }}>
+                            <CircularProgress />
+                        </Box>
+                    )}
                 </Box>
             </Box>
             <Footer />

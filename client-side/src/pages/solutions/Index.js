@@ -21,20 +21,20 @@ const Solutions = () => {
 
     const listSolutions = [
         {
-            title: "Troque de Contador por um Serviço que Entende sua Rotina na Saúde",
-            description: "Contabilidade para médicos, dentistas, psicólogos, fisioterapeutas e profissionais da área da saúde. Liberte-se da burocracia fiscal e foque no que realmente importa: cuidar de pessoas. Nós cuidamos dos impostos, obrigações e planejamento tributário para que sua atuação na saúde cresça com segurança, organização e tranquilidade.",
+            title: "Troque de contador por quem entende sua rotina digital",
+            description: <>Seja você <b>influencer, streamer, gamer, alt model, produtor(a), social media ou criador(a) independente,</b> aqui a contabilidade fala a sua língua. Deixe a parte burocrática com a gente e foque no que você faz de melhor: <b>criar, performar e engajar.</b> Cuidamos dos <b>impostos, obrigações e planejamento tributário</b> para você crescer com segurança, organização e liberdade.</>,
             img: "/assets/troqueContador.jpg",
             msg: "Olá, gostaria de entender melhor sobre a solução de trocar de contador."
         },
         {
-            title: "Tenha Apoio Especializado em Cada Etapa da Sua Jornada Profissional",
-            description: "Desde a abertura do CNPJ até o fechamento de balanços, nossa equipe especializada entende as nuances do setor da saúde. Acompanhamos sua evolução profissional com serviços de contabilidade eficientes, acessíveis e personalizados.",
-            img: "/assets/apoioEspecializado.jpg",
+            title: "Conte com quem te acompanha em cada fase da sua trajetória digital",
+            description: <>Do <b>início do seu CNPJ</b> até o <b>crescimento do seu negócio online</b>, estamos ao seu lado para garantir que tudo funcione de forma <b>simples</b> e <b>segura</b>. Nossa equipe entende as particularidades do mundo digital e oferece soluções contábeis sob medida para cada etapa da sua jornada — <b>do primeiro job à consolidação da sua marca</b>.</>,
+            img: "/assets/apoioespecializado.jpg",
             msg: "Olá, gostaria de entender melhor sobre a solução de apoio especializado."
         },
         {
-            title: "Foco no Atendimento, a Burocracia é Por Nossa Conta",
-            description: "Você cuida da saúde dos seus pacientes, e a Clarea cuida da saúde da sua empresa. Nossos planos oferecem suporte completo: impostos, declarações, folha de pagamento e muito mais, com linguagem simples e atendimento humanizado.",
+            title: "Foco no seu trabalho. A burocracia é com a gente",
+            description: <>Você cria, joga, performa e faz acontecer — e a ContBlack cuida da parte contábil para tudo continuar em dia. Nossos planos oferecem <b>suporte completo</b>, com <b>impostos, declarações, folha de pagamento e muito mais</b>, sempre com atendimento próximo e uma linguagem que você entende.</>,
             img: "/assets/focoAtendimento.jpg",
             msg: "Olá, gostaria de entender melhor sobre a solução de foco no atendimento."
         },
@@ -70,7 +70,8 @@ const Solutions = () => {
                     <motion.div style={{ flex: "1 1 300px" }} initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} viewport={{ once: true }}>
                         <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>Soluções</h1>
                         <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
-                            Na Clarea, entendemos que cada profissão da área da saúde tem suas particularidades — e por isso oferecemos soluções contábeis personalizadas para atender médicos, dentistas, psicólogos, fisioterapeutas, fonoaudiólogos, nutricionistas, biomédicos, enfermeiros, terapeutas ocupacionais e muitos outros profissionais do setor.
+                            Na ContBlack, a gente entende que cada criador tem o seu próprio universo — e por isso oferecemos <b>soluções contábeis sob medida</b> para quem vive da internet.
+                            Ajudamos você a <b>organizar, legalizar e escalar seu trabalho sem complicação</b> — pra você focar no que realmente importa: <b>criar, performar e crescer.</b>
                         </p>
                     </motion.div>
                 </div>
@@ -119,6 +120,7 @@ const Solutions = () => {
                                     variant="contained"
                                     sx={{
                                         backgroundColor: isLightBg ? "#1EFF86" : "#9C01B9",
+                                        display: index === 0 ? "inline-block" : "none",
                                         borderRadius: "17px 0 17px 0",
                                         fontSize: "0.7rem",
                                         color: "white",

@@ -7,9 +7,9 @@ import Footer from "../components/Footer";
 const AboutUs = () => {
 
     useEffect(() => {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }, [])
-    
+
     return (
         <>
             <Header active="sobreNos" />
@@ -57,7 +57,8 @@ const AboutUs = () => {
                     >
                         <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>Missão</h1>
                         <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
-                            Oferecer soluções contábeis e fiscais de alta qualidade, com ética, sigilo e excelência, promovendo organização, crescimento e tranquilidade aos profissionais da saúde por meio de um suporte personalizado e 100% online.
+                            Oferecer <b>soluções contábeis e fiscais de alta qualidade</b>, com <b>ética, sigilo e excelência</b>, impulsionando o <b>crescimento e a segurança</b> dos profissionais do meio digital.
+                            Nosso propósito é tornar a contabilidade <b>simples, acessível e totalmente online</b>, com <b>atendimento próximo e personalizado</b> para quem vive de criar e inovar na internet.
                         </p>
                     </motion.div>
                 </div>
@@ -93,19 +94,14 @@ const AboutUs = () => {
                         viewport={{ once: true }}
                     >
                         <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>
-                            A <b style={{ color: "#9C01B9" }}>Contblack</b> é a contabilidade digital que facilita sua vida!<b style={{ color: "#1EFF86" }}>.</b>
+                            A <b style={{ color: "#9C01B9" }}>Contblack</b> A contabilidade digital que entende o seu mundo!<b style={{ color: "#1EFF86" }}></b>
                         </h1>
                         <p style={{ fontSize: "1rem", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            A CONTBLACK. surgiu com uma visão clara: estabelecer-se como uma referência incontestável em todo o território nacional no fornecimento de serviços contábeis e fiscais especializados para aqueles que atuam no promissor mercado digital.
+                            A ContBlack nasceu para simplificar a vida de quem atua no universo digital — oferecendo <b>soluções contábeis seguras, acessíveis e totalmente online.</b>
+                            {" "}Somos parceiros de <b>criadores, gamers e profissionais digitais</b>, entregando <b>suporte personalizado, confiança e excelência</b> em cada detalhe.
                         </p>
                         <p style={{ fontSize: "1rem", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            Nossa missão é fornecer serviços fiscais e contábeis de alta qualidade, contribuindo para o sucesso e a sustentabilidade de seus negócios digitais. Buscamos ser parceiros confiáveis e eficientes, oferecendo soluções que atendam às necessidades específicas de cada cliente.
-                        </p>
-                        <p style={{ fontSize: "1rem", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            Trabalhamos com ética, competência e sigilo, buscando sempre a excelência e a especialização em nossos serviços. Valorizamos a parceria com nossos clientes, oferecendo suporte personalizado e confiável.
-                        </p>
-                        <p style={{ fontSize: "1rem", lineHeight: "1.6", marginBottom: "1rem" }}>
-                            Escolha o melhor plano para o seu momento e vem ser Contblack!
+                            Escolha o plano ideal para você e venha ser ContBlack!
                         </p>
                     </motion.div>
 

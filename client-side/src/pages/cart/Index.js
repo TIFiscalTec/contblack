@@ -23,19 +23,19 @@ const Cart = () => {
     });
     const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-        const verifyPlan = async () => {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/hasPlan`, {
-                headers: {
-                    Authorization: token
-                }
-            });
-            if (response.data.status === 200) {
-                navigate("../Dashboard");
-            }
-        }
-        verifyPlan()
-    }, [navigate, token])
+    // useEffect(() => {
+    //     const verifyPlan = async () => {
+    //         const response = await axios.get(`${process.env.REACT_APP_API_URL}/hasPlan`, {
+    //             headers: {
+    //                 Authorization: token
+    //             }
+    //         });
+    //         if (response.data.status === 200) {
+    //             navigate("../Dashboard");
+    //         }
+    //     }
+    //     verifyPlan()
+    // }, [navigate, token])
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -88,9 +88,9 @@ const Cart = () => {
                                     <p>{item.description}</p>
                                     <span>R$ {item.price ? item.price.toFixed(2).replace(".", ",") : "0,00"}</span>
                                 </div>
-                                <IconButton color="error" onClick={() => removeItem(item.id)}>
+                                {/* <IconButton color="error" onClick={() => removeItem(item.id)}>
                                     <DeleteIcon />
-                                </IconButton>
+                                </IconButton> */}
                             </div>
                         ))
                     )}
@@ -117,7 +117,7 @@ const Cart = () => {
                                 }
                             }}
                         >
-                            Finalizar Compra
+                            Ir para pagamento
                         </Button>
                     </div>
                 </div>

@@ -29,6 +29,7 @@ import AlertError from "../components/AlertError";
 import Loading from "../components/Loading";
 import { useLogin } from "../../contexts/LoginContext";
 import { CapitalizeWords } from "../../utils/CapitalizeWords";
+import { FormatToBrl } from "../../utils/FormatToBrl";
 
 const steps = [
     { number: 1, label: "Informações Pessoais" },
@@ -50,7 +51,7 @@ const Register = () => {
     const [nome, setNome] = useState("");
     const [nomeError, setNomeError] = useState(false);
 
-    const [typePerson, setTypePerson] = useState("");
+    const [typePerson, setTypePerson] = useState("pessoaFisica");
     const [typePersonError, setTypePersonError] = useState(false);
 
     const [cpf, setCpf] = useState("");
@@ -172,7 +173,7 @@ const Register = () => {
             setOpen(false);
 
             if (data.lead?.idLead) {
-                setLeadId(data.lead.idLead); // 🔒 mantém id do mesmo lead entre os steps
+                setLeadId(data.lead.idLead);
             }
         } catch (err) {
             setOpen(false);
@@ -261,6 +262,9 @@ const Register = () => {
         }
     }
 
+    const planoSelected = localStorage.getItem("planoSelecionado") ? JSON.parse(localStorage.getItem("planoSelecionado")) : false;
+
+
     const stepOne = () => {
         return (
             <div style={{ width: "100%" }}>
@@ -279,7 +283,6 @@ const Register = () => {
                             onChange={handleChange}
                         >
                             <MenuItem value={"pessoaFisica"} >Pessoa Física</MenuItem>
-                            <MenuItem value={"pessoaJuridica"}>Pessoa Jurídica</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -390,6 +393,10 @@ const Register = () => {
                                     <Link href="/politica-de-privacidade" target="_blank" underline="hover">
                                         Política de Privacidade
                                     </Link>
+                                    {" e os "}
+                                    <Link href="/termos-de-uso" target="_blank" underline="hover">
+                                        Termos de Uso
+                                    </Link>
                                 </>
                             } />
                         </RadioGroup>
@@ -403,7 +410,27 @@ const Register = () => {
         return (
             <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", alignContent: "center", padding: "50px 10px 10px" }}>
-                    <TextField label="Código" variant="outlined" size="small" required sx={{ width: isMobile ? "100%" : "40%", marginBottom: "20px" }} value={codigo} onChange={(e) => setCodigo(e.target.value)} />
+                    <p variant="h6" align="center" style={{ marginBottom: "20px" }}>
+                        Foi enviado um código de verificação para o e-mail: <strong>{email}</strong>. Verifique a caixa de entrada e o spam do e-mail e insira o código abaixo para continuar.
+                    </p>
+                    <TextField
+                        label="Código"
+                        inputProps={{ maxLength: 6 }}
+                        variant="outlined"
+                        size="small"
+                        required
+                        value={codigo}
+                        onChange={(e) => setCodigo(e.target.value)}
+                        sx={{
+                            width: isMobile ? "100%" : "40%",
+                            marginBottom: "20px",
+                            "& input": {
+                                letterSpacing: "10px",
+                                fontSize: "22px",
+                                textAlign: "center",
+                            }
+                        }}
+                    />
                     <Button onClick={() => HandleValidateEmailCode(email, codigo)}
                         sx={{
                             padding: "5px 28px",
@@ -491,67 +518,71 @@ const Register = () => {
 
     const HandleRegister = async () => {
         setOpen(true);
+
+        const api = axios.create({
+            baseURL: process.env.REACT_APP_API_URL
+        });
+
+        const dadosCadastro = {
+            nome,
+            email,
+            tipoPessoa: typePerson,
+            cpf: TirarMascara(cpf),
+            cnpj: TirarMascara(cnpj),
+            razaoSocial,
+            telefone: TirarMascara(telefone),
+            senha,
+            cep: TirarMascara(cep),
+            estado,
+            cidade,
+            bairro,
+            endereco: logradouro,
+            numero,
+            complemento
+        };
+
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/cadastro`, {
-                nome: nome,
-                email: email,
-                tipoPessoa: typePerson,
-                cpf: TirarMascara(cpf),
-                cnpj: TirarMascara(cnpj),
-                razaoSocial: razaoSocial,
-                telefone: TirarMascara(telefone),
-                senha: senha,
-                cep: TirarMascara(cep),
-                estado: estado,
-                cidade: cidade,
-                bairro: bairro,
-                endereco: logradouro,
-                numero: numero,
-                complemento: complemento
-            });
-            if (response.status === 200) {
+            const cadastroResponse = await api.post("/cadastro", dadosCadastro);
+
+            if (cadastroResponse.status === 200) {
                 setOpenSnackbarSuccess(true);
                 setMensagem("Usuário cadastrado com sucesso!");
-
             }
-        } catch (error) {
-            console.error('Erro ao cadastrar usuário:', error.response?.data || error.message);
-        }
 
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, senha });
-            console.log(response)
-            const { token, mensagem, usuario } = response.data;
-            console.log("Login successful:", mensagem);
+            const loginResponse = await api.post("/login", { email, senha });
+            const { token, mensagem, usuario } = loginResponse.data;
 
             localStorage.setItem("token", token);
             localStorage.setItem("email", usuario.Email);
-        } catch (error) {
-            if (error.status === 404 || error.status === 401) {
-                setOpenSnackbarError(true);
-                setMensagem("E-mail ou senha incorretos. Tente novamente.");
-            }
-        }
 
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/gerarContratoZapSign`, { email }, {
-                headers: {
-                    Authorization: `${localStorage.getItem("token")}`
-                }
-            });
-            console.log(response)
-            console.log("Login successful:", mensagem);
+            console.log("Login bem-sucedido:", mensagem);
+
+            const contratoResponse = await api.post(
+                "/gerarContratoZapSign",
+                { email },
+                { headers: { Authorization: token } }
+            );
+
+            console.log("Contrato gerado:", contratoResponse.data);
+
             setOpen(false);
             fetchLogin();
-            navigate("../assinarContrato")
+            navigate("../assinarContrato");
 
         } catch (error) {
-            if (error.status === 404 || error.status === 401) {
+            const status = error.response?.status;
+
+            console.error("Erro:", error.response?.data || error.message);
+
+            if (status === 401 || status === 404) {
                 setOpenSnackbarError(true);
-                setMensagem("Algo deu errado ao gerar contrato.");
+                setMensagem("E-mail ou senha incorretos ou problema ao gerar contrato.");
+            } else {
+                setOpenSnackbarError(true);
+                setMensagem("Ocorreu um erro inesperado. Tente novamente mais tarde.");
             }
         }
-    }
+    };
 
     const handleNextStep = async () => {
         console.log(cep, TirarMascara(cep))
@@ -723,6 +754,34 @@ const Register = () => {
                     backgroundColor: "#f0f0f0",
                     borderRadius: "12px"
                 }}>
+                    <div
+                        style={{
+                            display: planoSelected ? "flex" : "none",
+                            flexDirection: "column",
+                            backgroundColor: "#f9f9f9",
+                            border: "1px solid #e0e0e0",
+                            borderRadius: "12px",
+                            padding: "20px",
+                            marginBottom: "20px",
+                            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                        }}
+                    >
+                        <h3 style={{ margin: "0 0 10px 0", fontSize: isMobile ? "1.2rem" : "1.4rem", color: "#0b243d" }}>
+                            Informações do Plano Selecionado
+                        </h3>
+
+                        <p style={{ margin: "8px 0", fontSize: isMobile ? "1rem" : "1.1rem", fontWeight: "bold", color: "#333" }}>
+                            {planoSelected.title || "Nenhum plano selecionado"}
+                        </p>
+
+                        <p style={{ margin: "8px 0", fontSize: isMobile ? "0.95rem" : "1rem", color: "#555" }}>
+                            {planoSelected.description || "Nenhuma descrição disponível"}
+                        </p>
+
+                        <p style={{ margin: "8px 0", fontSize: isMobile ? "1rem" : "1.1rem", color: "#0b243d", fontWeight: "600" }}>
+                            {FormatToBrl(planoSelected.price) || "Nenhum valor disponível"}/mês (plano {planoSelected.periodicity})
+                        </p>
+                    </div>
                     <div style={{ width: "100%", padding: "0 10px 10px" }}>
                         <h1>Cadastro</h1>
                     </div>
@@ -736,39 +795,65 @@ const Register = () => {
                         overflowX: "auto"
                     }}>
                         {steps.map((step) => (
-                            <div key={step.number} style={{
-                                display: "flex",
-                                alignItems: "center",
-                                minWidth: isMobile ? "100%" : "180px",
-                                gap: "10px"
-                            }}>
-                                <div style={{
-                                    width: isMobile ? "30px" : "40px",
-                                    height: isMobile ? "30px" : "40px",
-                                    borderRadius: "50%",
-                                    backgroundColor: step.number === currentStep ? "#1EFF86" : "#9C01B9",
+                            <div
+                                key={step.number}
+                                style={{
                                     display: "flex",
-                                    justifyContent: "center",
                                     alignItems: "center",
-                                    color: "white",
-                                    transition: "0.3s"
-                                }}>
-                                    <p style={{
-                                        fontSize: isMobile ? "1rem" : "1.2rem",
-                                        margin: 0
-                                    }}>{step.number}</p>
+                                    minWidth: isMobile ? "100%" : "fit-content",
+                                    gap: "10px",
+                                    flexShrink: 0,
+                                }}
+                            >
+                                {/* Círculo do número */}
+                                <div
+                                    style={{
+                                        width: isMobile ? "30px" : "48px",
+                                        height: isMobile ? "30px" : "48px",
+                                        borderRadius: "50%",
+                                        backgroundColor: step.number === currentStep ? "#1EFF86" : "#9C01B9",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        color: "white",
+                                        fontWeight: "bold",
+                                        transition: "background-color 0.3s ease",
+                                    }}
+                                >
+                                    <span style={{ fontSize: isMobile ? "1rem" : "1.1rem" }}>
+                                        {step.number}
+                                    </span>
                                 </div>
-                                <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
-                                    <p style={{
-                                        margin: 0,
-                                        whiteSpace: "nowrap",
-                                        marginRight: "10px",
-                                        fontSize: isMobile ? "0.9rem" : "1rem"
-                                    }}>{step.label}</p>
-                                    <div style={{
-                                        height: "2px",
-                                        backgroundColor: "black"
-                                    }} />
+
+                                {/* Texto e linha */}
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <p
+                                        style={{
+                                            margin: 0,
+                                            // whiteSpace: "nowrap",
+                                            marginRight: "10px",
+                                            fontSize: isMobile ? "0.9rem" : "1rem",
+                                            color: "#0b243d",
+                                            fontWeight: step.number === currentStep ? "600" : "400",
+                                        }}
+                                    >
+                                        {step.label}
+                                    </p>
+
+                                    {/* Linha */}
+                                    <div
+                                        style={{
+                                            flexGrow: 1,
+                                            height: "2px",
+                                            backgroundColor: "#000",
+                                            opacity: 0.2,
+                                        }}
+                                    />
                                 </div>
                             </div>
                         ))}
@@ -810,6 +895,7 @@ const Register = () => {
                             }}
                         >Voltar</Button>
                         <Button onClick={handleNextStep}
+                            disabled={currentStep === 3 ? true : false}
                             sx={{
                                 padding: "5px 28px",
                                 width: "100px",

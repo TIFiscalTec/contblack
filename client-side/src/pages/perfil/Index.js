@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Grid, Paper, Avatar, Button } from "@mui/material";
+import { Box, Typography, Paper, Avatar, Button } from "@mui/material";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import PersonIcon from "@mui/icons-material/Person";
@@ -13,7 +13,6 @@ const Perfil = () => {
 
     useEffect(() => {
         const GetUserData = async () => {
-            console.log("opa")
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/perfil`, {
                     headers: { Authorization: `${localStorage.getItem("token")}` }
@@ -35,18 +34,7 @@ const Perfil = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const infoBox = (label, value) => (
-        <Grid item xs={12} sm={6}>
-            <Box>
-                <Typography variant="caption" color="text.secondary">
-                    {label}
-                </Typography>
-                <Typography variant="body1" fontWeight="bold">
-                    {value || "—"}
-                </Typography>
-            </Box>
-        </Grid>
-    );
+
 
     const handleLogout = () => {
         localStorage.removeItem("token");

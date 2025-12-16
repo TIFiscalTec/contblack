@@ -13,6 +13,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ModalNotificacao from "./ModalNotificacao";
 import axios from "axios";
 import ConfirmarMudarPlano from "../../components/ConfirmarMudarPlano";
+import AlertSuccess from "../../components/AlertSuccess";
+import AlertError from "../../components/AlertError";
 
 const cardVariants = {
     hidden: { opacity: 0, y: 40 },
@@ -40,6 +42,9 @@ const MudarPlano = () => {
     const [notificacoes, setNotificacoes] = useState([]);
     const [openConfirmarMudarPlano, setOpenConfirmarMudarPlano] = useState(false);
     const [idPlanoEscolhido, setIdPlanoEscolhido] = useState(null);
+    const [openSnackbarSuccess, setOpenSnackbarSuccess] = useState(false);
+    const [mensagem, setMensagem] = useState("");
+    const [openSnackbarError, setOpenSnackbarError] = useState(false);
     const scrollRef = useRef(null);
     const scrollLeft = () => {
         scrollRef.current.scrollBy({ left: -360, behavior: "smooth" });
@@ -161,8 +166,15 @@ const MudarPlano = () => {
                 Authorization: `${localStorage.getItem("token")}`
             }
         });
-        alert("plano alterado com sucesso!");
-        fetchUser();
+
+        if (response.data.status === 200) {
+            setMensagem("Plano alterado com sucesso!");
+            setOpenSnackbarSuccess(true);
+            fetchUser();
+        } else {
+            setMensagem("Falha ao alterar o plano. Tente novamente mais tarde.");
+            setOpenSnackbarError(true);
+        }
     }
 
 
@@ -269,24 +281,24 @@ const MudarPlano = () => {
 
                                     <h3 style={{ textAlign: "center", color: "red", display: plan?.idPlano === user?.plano?.idPlano ? "block" : "none" }}>Plano Atual</h3>
                                     <h1 style={{ textAlign: "center" }}>{plan.nome}</h1>
-                                    <p style={{ fontSize: "12px", marginBottom: "10px", textAlign: "center" }}>{plan.descricao}</p>
+                                    <p style={{ fontSize: "12px", marginBottom: "10px", textAlign: "center", height: "100px" }}>{plan.descricao}</p>
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <p style={{ fontSize: "15px", marginRight: "5px" }}>
-                                            {Number(plan?.valorAntigoMensal)?.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            {Number(plan?.valorAntigoMensal) ? Number(plan?.valorAntigoMensal)?.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ""}
                                         </p>
-                                        {plan.descontoMensal ? (
-                                            <p
-                                                style={{
-                                                    fontSize: "13px",
-                                                    backgroundColor: "#1EFF86",
-                                                    padding: "1px 5px",
-                                                    borderRadius: "10px",
-                                                    color: "black",
-                                                }}
-                                            >
-                                                <>{`${parseInt(plan.descontoMensal)}%OFF`}</>
-                                            </p>
-                                        ) : ("")}
+                                        <p
+                                            style={{
+                                                fontSize: "13px",
+                                                backgroundColor: "#0b243d",
+                                                padding: "1px 5px",
+                                                borderRadius: "10px",
+                                                color: "white",
+                                            }}
+                                        >
+                                            {Number(plan.descontoMensal) > 0 ? (
+                                                <>{parseInt(plan.descontoMensal)}%OFF</>
+                                            ) : ("")}
+                                        </p>
                                     </div>
                                     <p style={{ fontSize: "25px", textAlign: "center", marginTop: "5px", marginBottom: "5px" }}>
                                         <strong> POR R$ {Number(plan?.valorNovoMensal)?.toFixed(2).replace(".", ",")}</strong>
@@ -355,6 +367,8 @@ const MudarPlano = () => {
                 setOpenConfirmarMudarPlano={setOpenConfirmarMudarPlano}
                 handleChangePlan={handleChangePlan}
             />
+            <AlertSuccess setOpenSnackbarSuccess={setOpenSnackbarSuccess} openSnackbarSuccess={openSnackbarSuccess} mensagem={mensagem} />
+            <AlertError setOpenSnackbarError={setOpenSnackbarError} openSnackbarError={openSnackbarError} mensagem={mensagem} />
         </>
     )
 }

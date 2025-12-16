@@ -211,30 +211,30 @@ const Plans = () => {
     ];
 
     const HandleChoosePlan = (id, title, description, price, priceYear, periodicity) => {
-        console.log(title)
-        window.open(gerarLinkWhatsApp(`Olá, gostaria de assinar o plano ${title}.`), '_blank');
-        // if (!token) {
-        //     navigate("/Cadastro");
-        // }
+        // console.log(title)
+        // window.open(gerarLinkWhatsApp(`Olá, gostaria de assinar o plano ${title}.`), '_blank');
+        if (!token) {
+            navigate("/Cadastro");
+        }
 
-        // if (hasPlan) {
-        //     navigate("../Dashboard/Assinatura");
-        //     return;
-        // } else {
-        //     console.log({ id, title, description, price, priceYear, periodicity });
-        //     if (periodicity === "mensal") {
-        //         localStorage.setItem("planoSelecionado", JSON.stringify({ id, title, description, price, periodicity }));
-        //     } else {
-        //         localStorage.setItem("planoSelecionado", JSON.stringify({ id, title, description, price: priceYear, periodicity }));
-        //     }
-        //     if (token) {
-        //         fetchLogin();
-        //         navigate("../AssinarContrato");
-        //     } else {
-        //         navigate("/Cadastro");
-        //     }
-        //     return;
-        // }
+        if (hasPlan) {
+            navigate("../Dashboard/Assinatura");
+            return;
+        } else {
+            console.log({ id, title, description, price, priceYear, periodicity });
+            if (periodicity === "mensal") {
+                localStorage.setItem("planoSelecionado", JSON.stringify({ id, title, description, price, periodicity }));
+            } else {
+                localStorage.setItem("planoSelecionado", JSON.stringify({ id, title, description, price: priceYear, periodicity }));
+            }
+            if (token) {
+                fetchLogin();
+                navigate("../AssinarContrato");
+            } else {
+                navigate("/Cadastro");
+            }
+            return;
+        }
 
     }
 

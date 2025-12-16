@@ -102,6 +102,9 @@ const DetalhesCobranca = () => {
                     <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
                         Histórico de Pagamento
                     </Typography>
+                    <div style={{ width: "100%", textAlign: "right", marginBottom: "10px" }}>
+                        <Button variant="text" size="small" onClick={() => navigate("../Dashboard/alterarMetodoPagamento")}>Alterar método de pagamento</Button>
+                    </div>
                     <Divider />
                     <Box
                         sx={{
@@ -141,11 +144,11 @@ const DetalhesCobranca = () => {
                                     </Box>
 
                                     <Typography variant="body2" mb={1}>
-                                        Forma de pagamento: {plano.billingType}
+                                        Forma de pagamento: <b>{plano.billingType === "CREDIT_CARD" ? "Cartão de Crédito" : "Boleto Bancário"}</b>
                                     </Typography>
 
                                     <Button
-                                        
+
                                         variant="outlined"
                                         startIcon={<VisibilityIcon />}
                                         onClick={() => window.open(plano.invoiceUrl, "_blank")}

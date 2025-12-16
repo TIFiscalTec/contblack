@@ -19,6 +19,14 @@ import DetalhesCobranca from './pages/dashboard/components/DetalhesCobranca';
 import ResetarSenha from './pages/resetarSenha/Index';
 import MudarPlano from './pages/dashboard/components/MudarPlano';
 import CancelarAssinatura from './pages/dashboard/components/CancelarAssinatura';
+import Certificado from './pages/dashboard/components/Certificado';
+import Servicos from './pages/dashboard/components/Servicos';
+import NotasFiscaisEmitidas from './pages/dashboard/components/NotasFiscaisEmitidas';
+import EmitirNotaServico from './pages/dashboard/components/EmitirNotaServico';
+import PoliticaPrivacidade from './pages/politicaDePrivacidade/Index';
+import TermosUso from './pages/termosDeUso/Index';
+import MetodoPagamento from './pages/dashboard/components/MetodoPagamento';
+import ApresentacaoContblack from './pages/apresentacaoContblack/ApresentacaoContblack';
 
 import { UserProvider } from './contexts/UserContext';
 import { DiscountProvider } from './contexts/DiscountContext';
@@ -42,14 +50,22 @@ function App() {
 						<Route path="/Perfil" element={<Perfil />} />
 						<Route path="/AssinarContrato" element={<AssinarContrato />} />
 						<Route path="/Dashboard" element={<Dashboard />} />
+						<Route path="/Dashboard/Servicos" element={<Servicos />} />
 						<Route path="/Dashboard/Faturas/Pendentes" element={<FaturasPendentes />} />
 						<Route path="/Dashboard/Faturas/Pagas" element={<FaturasPagas />} />
+						<Route path="/Dashboard/NotasFiscaisEmitidas" element={<NotasFiscaisEmitidas />} />
+						<Route path="/Dashboard/EmitirNotaServico" element={<EmitirNotaServico />} />
 						<Route path="/Dashboard/Perfil" element={<PerfilDashboard />} />
 						<Route path="/Dashboard/Assinatura" element={<Assinatura />} />
 						<Route path="/Dashboard/DetalhesCobranca" element={<DetalhesCobranca />} />
+						<Route path="/Dashboard/alterarMetodoPagamento" element={<MetodoPagamento />} />
 						<Route path="/Dashboard/MudarPlano" element={<MudarPlano />} />
 						<Route path="/resetarSenha" element={<ResetarSenha />} />
 						<Route path="/CancelarAssinatura" element={<CancelarAssinatura />} />
+						<Route path="/Dashboard/Certificado" element={<Certificado />} />
+						<Route path="/politica-de-privacidade" element={<PoliticaPrivacidade />} />
+						<Route path="/termos-de-uso" element={<TermosUso />} />
+						<Route path="/apresentacao-contblack" element={<ApresentacaoContblack />} />
 					</Routes>
 				</LoginProvider>
 			</DiscountProvider>

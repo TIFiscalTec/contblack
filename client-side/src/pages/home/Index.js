@@ -13,6 +13,13 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { ReactTyped } from "react-typed";
 import EastIcon from '@mui/icons-material/East';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import PlaceIcon from '@mui/icons-material/Place';
+import { Box, Divider } from "@mui/material";
+
 
 import { motion, AnimatePresence } from "framer-motion";
 // import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
@@ -22,8 +29,30 @@ import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 
 function Home() {
     const navigate = useNavigate();
+
+    const [cidades, setCidades] = useState([]);
+    const [cidadesFiltered, setCidadesFiltered] = useState([]);
+
+
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        let pathCsv = "/assets/csvCidades/Cidades homologadas - 14-11-2025.csv";
+
+        const reader = new FileReader();
+        fetch(pathCsv)
+            .then(response => response.blob())
+            .then(blob => {
+                reader.readAsText(blob);
+            });
+        reader.onload = () => {
+            const csvData = reader.result;
+            const lines = csvData.split('\n').slice(1); // Ignora o cabeçalho
+            for (let line of lines) {
+                let [status, cidade, uf, layoutIntegracao, padrao, documentacaoDoPadrao, codigoIbge, dadosObrigatoriosDasNotasTomadas, notasTomadas, login, senha, multiplosServicos, certificado] = line.split(',').map(field => field.replace(/^"|"$/g, '').trim());
+                setCidades(prevCidades => [...prevCidades, { status, cidade, uf, layoutIntegracao, padrao, documentacaoDoPadrao, codigoIbge, dadosObrigatoriosDasNotasTomadas, notasTomadas, login, senha, multiplosServicos, certificado }]);
+            }
+        }
     }, [])
     const cards = [
         { value: "FREELAS", img: "/assets/freelancer.svg", desc: "Mais briefing, menos burocracia e você focado no seu talento." },
@@ -59,6 +88,36 @@ function Home() {
         visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
         exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
     };
+
+    const handleFilterCity = (input) => {
+        console.log(cidades);
+        if (!input) {
+            setCidadesFiltered([]);
+            return;
+        }
+        const normalizeText = (text) =>
+            text
+                .normalize('NFD') // separa caracteres + acentos
+                .replace(/[\u0300-\u036f]/g, '') // remove acentos
+                .replace(/\s+/g, ' ') // normaliza espaços
+                .trim()
+                .toLowerCase();
+
+        const filtered = cidades
+            .filter(cidade => {
+                const cidadeNormalized = normalizeText(cidade.cidade);
+                const inputNormalized = normalizeText(input);
+                return cidadeNormalized.includes(inputNormalized);
+            })
+            .slice(0, 2);
+
+
+        if (filtered.length === 0) {
+            setCidadesFiltered(false);
+            return;
+        }
+        setCidadesFiltered(filtered);
+    }
 
     return (
         <>
@@ -99,7 +158,7 @@ function Home() {
                                         boxShadow: "0 4px 10px #1EFF86",
 
                                     }
-                                }} onClick={() => navigate("../solucoes")}>
+                                }} onClick={() => navigate("../planos")}>
                                     Troque de contador
                                 </Button>
                                 <Button size="small" variant="contained" endIcon={<EastIcon />} sx={{
@@ -125,7 +184,7 @@ function Home() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <img src="/assets/home-img1-1024x963.jpg" alt="Contador" style={{borderRadius: "44px 0 44px 0"}} />
+                            <img src="/assets/home-img1-1024x963.jpg" alt="Contador" style={{ borderRadius: "44px 0 44px 0" }} />
                         </motion.div>
                     </div>
                 </div>
@@ -165,7 +224,7 @@ function Home() {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4, duration: 0.6 }}
-                                style={{ height: "fit-content", minHeight: "120px" }}
+                                style={{ height: "fit-content", minHeight: "150px" }}
                             >
                                 Facilitamos a vida de{" "}
                                 <ReactTyped
@@ -216,6 +275,69 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <div style={{ width: "100%", display: "flex", justifyContent: "center", background: "linear-gradient(35deg, #1EFF86 0%, #1b3a5d 100%)", padding: "40px 0" }}>
+                <div style={{ width: "80%", maxWidth: "900px" }}>
+
+                    <h1
+                        style={{
+                            fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+                            margin: "30px 0",
+                            textAlign: "center",
+                            color: "white",
+                            lineHeight: 1.3,
+                        }}
+                    >
+                        Descubra como podemos transformar sua relação com a contabilidade
+                    </h1>
+
+                    {/* Linha Verde */}
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "2px",
+                            backgroundColor: "#1EFF86",
+                            margin: "30px 0",
+                        }}
+                    />
+
+                    <Box
+                        sx={{
+                            position: "relative",
+                            paddingBottom: "56.25%", // Proporção 16:9
+                            height: 0,
+                            overflow: "hidden",
+                            borderRadius: 2,
+                            boxShadow: "0px 0px 50px #1EFF86"
+                        }}
+                    >
+                        <video
+                            src="/assets/Contblack.mp4"
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                            }}
+                            controls
+                        />
+                    </Box>
+
+                    {/* Linha Verde */}
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "2px",
+                            backgroundColor: "#1EFF86",
+                            margin: "30px 0",
+                        }}
+                    />
+                </div>
+            </div>
+
+
             <WhatWeDo scrollToPlans={scrollToPlans} />
             <SimulacaoImpostos />
             <div className="hero-container" style={{ backgroundColor: "white" }}>
@@ -248,6 +370,211 @@ function Home() {
                     </div>
                 </div>
             </div>
+
+            <section
+                style={{
+                    width: "100%",
+                    minHeight: "500px",
+                    background: "linear-gradient(135deg, #233344 0%, #1b3a5d 100%)",
+                    padding: "60px 20px",
+                    boxSizing: "border-box",
+                    color: "#ffffff",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <div
+                    style={{
+                        width: "100%",
+                        maxWidth: "800px",
+                        textAlign: "center",
+                        marginBottom: "30px",
+                        padding: "0 10px",
+                    }}
+                >
+                    <h1
+                        style={{
+                            fontSize: "clamp(1.2rem, 4vw, 2.5rem)",
+                            margin: 0,
+                            lineHeight: 1.3,
+                            color: "#ffffff",
+                        }}
+                    >
+                        Descubra se sua cidade também é compatível.
+                    </h1>
+                    <p
+                        style={{
+                            marginTop: "10px",
+                            color: "#1EFF86",
+                            fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
+                            lineHeight: 1.5,
+                        }}
+                    >
+                        O emissor Cont Fácil está homologado em mais de 2.000 cidades e compatível com centenas de padrões de Nota Fiscal de Serviço (NFS-e) em todo o Brasil. <a href="/assets/csvCidades/Cidades_homologadas.xlsx" download style={{ color: "#1EFF86", textDecoration: "underline" }}>baixe aqui</a>
+                    </p>
+                </div>
+
+                <div
+                    style={{
+                        width: "100%",
+                        maxWidth: "600px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "center",
+                        gap: "20px",
+                        margin: "0 auto",
+                        padding: "0 10px",
+                    }}
+                >
+                    <TextField
+                        placeholder="Digite sua cidade"
+                        fullWidth
+                        autoComplete="off"
+                        variant="outlined"
+                        sx={{
+                            width: { xs: "100%", sm: "80%", md: "60%" },
+                            backgroundColor: "#ffffff",
+                            borderRadius: "8px",
+                            "& .MuiInputBase-input": {
+                                color: "#0b243d",
+                            },
+                            "& .MuiInputLabel-root": {
+                                color: "#0b243d",
+                            },
+                            "& .MuiOutlinedInput-root": {
+                                "& fieldset": {
+                                    borderColor: "#ffffff",
+                                },
+                                "&:hover fieldset": {
+                                    borderColor: "#1EFF86",
+                                },
+                                "&.Mui-focused fieldset": {
+                                    borderColor: "#1EFF86",
+                                },
+                            },
+                        }}
+                        slotProps={{
+                            input: {
+                                startAdornment: (
+                                    <PlaceIcon sx={{ color: "#0b243d", mr: 1 }} position="start" />
+                                ),
+                            },
+                        }}
+                        onChange={e => handleFilterCity(e.target.value)}
+                    />
+                </div>
+                <div
+                    style={{
+                        width: "100%",
+                        maxWidth: "600px",
+                        marginTop: "20px",
+                        padding: "10px",
+                    }}
+                >
+                    {
+                        !cidadesFiltered ? (
+                            <div style={{ textAlign: "center", marginTop: "20px" }}>
+                                <p>Cidade não encontrada.</p>
+                            </div>
+                        ) : (
+                            cidadesFiltered.map((cidade, index) => {
+                                const rowStyle = {
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "flex-start",
+                                    flexWrap: "wrap",
+                                    gap: "12px",
+                                    marginTop: "10px",
+                                };
+
+                                const infoBoxStyle = {
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "4px",
+                                    minWidth: "120px",
+                                };
+
+                                const chipBoxStyle = {
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "8px",
+                                    marginTop: "12px",
+                                };
+
+                                return (
+                                    <div
+                                        key={index}
+                                        style={{
+                                            backgroundColor: "#1b3a5d",
+                                            padding: "15px",
+                                            borderRadius: "10px",
+                                            color: "#fff",
+                                            marginBottom: "20px",
+                                            boxShadow: "0 4px 6px rgba(0,0,0,0.2)",
+                                        }}
+                                    >
+                                        {/* Linha 1: Cidade e UF */}
+                                        <div style={rowStyle}>
+                                            <div style={infoBoxStyle}>
+                                                <span style={{ fontWeight: "600" }}>Cidade:</span>
+                                                <span>{cidade.cidade}</span>
+                                            </div>
+                                            <div style={infoBoxStyle}>
+                                                <span style={{ fontWeight: "600" }}>UF:</span>
+                                                <span>{cidade.uf}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Linha 2: Layout, Padrão e Código IBGE */}
+                                        <div style={rowStyle}>
+                                            <div style={infoBoxStyle}>
+                                                <span style={{ fontWeight: "600" }}>Layout de integração:</span>
+                                                <span>{cidade.layoutIntegracao}</span>
+                                            </div>
+                                            <div style={infoBoxStyle}>
+                                                <span style={{ fontWeight: "600" }}>Padrão:</span>
+                                                <span>{cidade.padrao}</span>
+                                            </div>
+                                            <div style={infoBoxStyle}>
+                                                <span style={{ fontWeight: "600" }}>Código IBGE:</span>
+                                                <span>{cidade.codigoIbge}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Linha 3: Dados obrigatórios das notas tomadas */}
+                                        {/* <div style={rowStyle}>
+                                    <div style={{ ...infoBoxStyle, flex: "1 1 100%" }}>
+                                        <span style={{ fontWeight: "600" }}>Dados obrigatórios das notas tomadas:</span>
+                                        <span>{cidade.dadosObrigatoriosDasNotasTomadas}</span>
+                                    </div>
+                                </div> */}
+
+                                        <Divider style={{ margin: "12px 0", borderColor: "#1EFF86" }} />
+
+                                        {/* Linha 4: Chips */}
+                                        <div style={chipBoxStyle}>
+                                            <Chip
+                                                icon={
+                                                    cidade.status === "Operante" ? (
+                                                        <CheckIcon color="success" />
+                                                    ) : (
+                                                        <CloseIcon color="error" />
+                                                    )
+                                                }
+                                                label={cidade.status === "Operante" ? "Cidade compatível com emissor Cont Fácil" : "Cidade não compatível com emissor Cont Fácil"}
+                                                variant="outlined"
+                                                sx={{ color: "#fff", borderColor: "#1EFF86" }}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                </div>
+
+            </section>
 
             <div ref={plansRef}>
                 <Plans />
@@ -314,7 +641,7 @@ function Home() {
                                 initial="hidden"
                                 animate="visible"
                                 style={{
-                                    width: "200px",
+                                    width: window.innerWidth < 600 ? "100px" : "200px",
                                     height: "150px",
                                     borderRadius: "15px",
                                     padding: "10px 20px",

@@ -159,11 +159,8 @@ const Footer = () => {
                     >
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("/")}>PÁGINA INICIAL</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../SobreNos")}>SOBRE NÓS</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANOS</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Solucoes")}>SOLUÇÕES</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Nichos")}>NICHOS</strong>
-                        <strong>FALE CONOSCO</strong>
-                        <strong>TRABALHE CONOSCO</strong>
                     </div>
                 </motion.div>
 
@@ -181,10 +178,6 @@ const Footer = () => {
                             marginTop: "20px",
                         }}
                     >
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO STARTER</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO BÁSICO</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO AVANÇADO</strong>
-                        <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Planos")}>PLANO PLUS+</strong>
                         <strong>ABERTURA DE EMPRESA</strong>
                         <strong>ENTREGA DE DECLARAÇÕES</strong>
                         <strong style={{ cursor: "pointer" }} onClick={() => navigate("../Solucoes")}>TROQUE DE CONTADOR</strong>
@@ -199,7 +192,7 @@ const Footer = () => {
                 >
                     <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "8px" }}>
                         <h1 style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)", color: "white" }}>Contato.</h1>
-                        <h2 style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)", color: "white" }}>(41) 98422-9975</h2>
+                        <h2 style={{ fontSize: "clamp(1rem, 2vw, 1.5rem)", color: "white" }}>(41) 99236-2095</h2>
                         <strong>personal@contblack.com.br</strong>
                         <Button
                             variant="contained"
@@ -229,7 +222,6 @@ const Footer = () => {
 
             {/* Botão voltar ao topo */}
             <motion.div
-                variants={buttonVariants}
                 initial="hidden"
                 animate="visible"
                 whileHover="hover"
@@ -243,6 +235,7 @@ const Footer = () => {
                 <Button
                     onClick={scrollToTop}
                     variant="contained"
+                    variants={buttonVariants}
                     sx={{
                         marginTop: "20px",
                         padding: "7px 14px",

@@ -48,6 +48,7 @@ function Header(props) {
                 style={{
                     backgroundColor: showHeader ? "transparent" : "#233344",
                     borderRadius: showHeader ? "0" : "40px",
+                    marginTop: showHeader ? "0" : "10px",
                     paddingLeft: "40px",
                     paddingRight: "40px",
                     width: "60%",
@@ -113,7 +114,7 @@ function Header(props) {
                     </a>
                     {/* <p className="menu-button" onClick={() => navigate("../SobreNos")}
                         style={{ color:"#fff" }}>BLOG</p> */}
-                    <PersonOutlineIcon className="menu-button" style={{ color: "#fff", display: token ? "none" : "block", fontSize: "20px" }} onClick={() => navigate("../Login")} />
+                    <PersonOutlineIcon className="menu-button" style={{ color: "#fff", fontSize: "20px" }} onClick={() => navigate("../Login")} />
 
                 </div>
             </div>

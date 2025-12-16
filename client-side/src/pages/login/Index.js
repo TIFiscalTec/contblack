@@ -59,7 +59,6 @@ const Login = () => {
             setMensagem("E-mail ou senha incorreto.")
             setOpenSnackbarError(true)
         }
-
     };
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -117,9 +116,12 @@ const Login = () => {
                                 required
                                 size="small"
                             />
-                            <FormControl variant="outlined" size="small" required>
+                            <FormControl variant="outlined" size="small" required autoComplete="off" >
                                 <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
                                 <OutlinedInput
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleLoginSubmit();
+                                    }}
                                     onChange={(e) => setSenha(e.target.value)}
                                     name="senha"
                                     required

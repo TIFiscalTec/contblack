@@ -25,50 +25,63 @@ const Planos = () => {
     const listPlans = [
         {
             title: "Plano Starter",
-            subTitle: "Aqui sua jornada digital atinge um novo nível! Sua saúde financeira está prestes a ficar em dia com o plano Starter da FisCare!",
+            subTitle: "Aqui sua jornada digital começa com o pé direito! Coloque sua saúde financeira em dia e dê os primeiros passos com o plano Starter.",
             description: "Por apenas R$149 por mês, você tem:",
             advantages: [
-                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física (sócio)",
-                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano)",
-                "Atendimento personalizado em horário comercial"
+                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física (sócio);",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano);",
+                "Atendimento personalizado em horário comercial."
             ],
-            finalText: "Assine agora mesmo e comece a facilitar e a profissionalizar seu trabalho digital com a FisCare!",
+            finalText: <b>Assine agora e leve sua rotina digital para o próximo nível com a ContBlack!</b>,
             img: "/assets/starter.jpg"
         },
         {
             title: "Plano Básico",
-            subTitle: "Aqui sua jornada digital atinge um novo nível! Sua saúde financeira está prestes a ficar em dia com o plano Básico da FisCare!",
-            description: "Por apenas R$149 por mês, você tem:",
+            subTitle: "Dê um upgrade na sua gestão digital! O plano Básico coloca mais organização e controle na sua rotina financeira.",
+            description: "Por apenas R$329 por mês, você tem:",
             advantages: [
-                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física (sócio)",
-                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano)",
-                "Atendimento personalizado em horário comercial"
+                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física;",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano);",
+                "Atendimento personalizado em horário comercial;",
+                "Folha de pagamento de até 2 colaboradores;",
+                "Elaboração e entrega de obrigações fiscais para 2 pessoas físicas."
             ],
-            finalText: "Assine agora mesmo e comece a facilitar e a profissionalizar seu trabalho digital com a FisCare!",
+            finalText: <b>Assine já e comece a profissionalizar seu trabalho digital com a ContBlack!</b>,
             img: "/assets/basico.jpg"
         },
         {
             title: "Plano Avançado",
-            subTitle: "Aqui sua jornada digital atinge um novo nível! Sua saúde financeira está prestes a ficar em dia com o plano Avançado da FisCare!",
-            description: "Por apenas R$149 por mês, você tem:",
+            subTitle: "Eleve sua performance digital! O plano Avançado é feito para quem quer mais controle e suporte estratégico no dia a dia.",
+            description: "Por apenas R$ 659 por mês, você tem:",
             advantages: [
-                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física (sócio)",
-                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano)",
-                "Atendimento personalizado em horário comercial"
+                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física;",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano);",
+                "Atendimento personalizado em horário comercial;",
+                "Folha de pagamento de até 6 colaboradores;",
+                "Elaboração e entrega de obrigações fiscais para 2 pessoas físicas;",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica no regime SIMPLES NACIONAL;",
+                "Emissão de até 35 NFs/mês (sob demanda);",
+                "Grupo Exclusivo no WhatsApp.",
             ],
-            finalText: "Assine agora mesmo e comece a facilitar e a profissionalizar seu trabalho digital com a FisCare!",
+            finalText: <b>Assine já e comece a profissionalizar seu trabalho digital com a ContBlack!</b>,
             img: "/assets/avancado.jpg"
         },
         {
             title: "Plano Plus+",
-            subTitle: "Aqui sua jornada digital atinge um novo nível! Sua saúde financeira está prestes a ficar em dia com o plano Expert da FisCare!",
-            description: "Por apenas R$149 por mês, você tem:",
+            subTitle: "Para quem quer dominar o universo digital: o plano Plus+ oferece suporte completo e alto nível de gestão para sua jornada profissional.",
+            description: "Por apenas R$1.319 por mês, você tem:",
             advantages: [
-                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física (sócio)",
-                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até 81.000,00/ano)",
-                "Atendimento personalizado em horário comercial"
+                "Elaboração e entrega de obrigações fiscais para até 1 pessoa física;",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até R$81.000/ano);",
+                "Atendimento personalizado em horário comercial;",
+                "Elaboração e entrega de obrigações fiscais para 2 pessoas físicas;",
+                "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica no regime SIMPLES NACIONAL;",
+                "Grupo Exclusivo no WhatsApp;",
+                "Folha de pagamento de até 10 colaboradores;",
+                "Emissão de até 70 NFs/mês (sob demanda);",
+                "1 consultoria de até 4h por mês com emissão de parecer.",
             ],
-            finalText: "Assine agora mesmo e comece a facilitar e a profissionalizar seu trabalho digital com a FisCare!",
+            finalText: <b>Assine já e transforme sua rotina digital com a ContBlack, com suporte total para crescer com segurança e liberdade!</b>,
             img: "/assets/plus.jpg"
         }
     ];
@@ -105,16 +118,17 @@ const Planos = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>Planos pensados para quem cuida de vidas</h1>
+                        <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>Planos feitos para o seu universo digital</h1>
                         <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
-                            Nossos planos contábeis foram desenvolvidos especialmente para médicos, dentistas, psicólogos, fisioterapeutas e demais profissionais da saúde. Oferecemos soluções práticas e seguras que garantem o cumprimento das obrigações fiscais com total transparência, agilidade e tranquilidade. Cuidamos da parte contábil para que você possa focar no que realmente importa: cuidar de pessoas.
+                            Oferecemos <b>soluções contábeis completas e seguras</b> para quem vive da criação de conteúdo online.
+                            Deixe a parte fiscal conosco e dedique-se ao que importa: <b>expandir sua presença, engajar seu público e crescer no mercado digital.</b>
                         </p>
                     </motion.div>
                 </div>
             </div>
+            <Plans />
 
             <WhatWeDo scrollToPlans={scrollToPlans} />
-            <Plans />
 
             {listPlans.map((plan, index) => (
                 <div key={index} style={{ width: "100%", padding: "20px", display: "flex", justifyContent: "center" }}>
@@ -134,7 +148,7 @@ const Planos = () => {
                             <p style={{ marginBottom: "10px", fontSize: "1.1rem" }}>{plan.description}</p>
                             <ul>
                                 {plan.advantages.map((advantage, i) => (
-                                    <li key={i}>{advantage}.</li>
+                                    <li key={i}>{advantage}</li>
                                 ))}
                             </ul>
                             <p style={{ fontWeight: "bold", marginTop: "10px" }}>{plan.finalText}</p>

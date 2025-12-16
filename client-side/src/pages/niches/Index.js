@@ -14,8 +14,8 @@ const NicheCard = ({ title, description, link }) => {
     }, [])
 
     return (
-//         9C01B9
-// 1EFF86
+        //         9C01B9
+        // 1EFF86
         <motion.div
             style={{
                 width: "200px",
@@ -87,7 +87,7 @@ const Niches = () => {
             description: "Organize sua receita nacional e internacional sem burocracia.",
         },
         {
-            title: "infoprodutores",
+            title: "Infoprodutores",
             description: "Do mil ao milhão, sem problemas com o Leão.",
         },
         {
@@ -161,11 +161,8 @@ const Niches = () => {
                     >
                         <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>Nichos</h1>
                         <p style={{ fontSize: "1.1rem", lineHeight: "1.6" }}>
-                            Entendemos que cada profissão tem suas particularidades. Por isso, oferecemos um atendimento
-                            contábil personalizado para médicos, dentistas, psicólogos, fisioterapeutas, nutricionistas,
-                            fonoaudiólogos, biomédicos e demais profissionais da área da saúde. Nossos serviços são
-                            adaptados à rotina e às exigências de cada especialidade, garantindo suporte completo com
-                            foco em economia tributária, organização financeira e segurança fiscal.
+                            Cada criador tem sua própria rotina e desafios. Por isso, oferecemos <b>atendimento contábil personalizado para influencers, gamers, alt models, streamers</b> e outros profissionais digitais.
+                            Nossos serviços são pensados para se ajustar ao seu dia a dia, garantindo <b>organização financeira, segurança fiscal e liberdade</b> para focar no que você faz de melhor.
                         </p>
                     </motion.div>
                 </div>

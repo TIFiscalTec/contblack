@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './Index.css';
+// import { initFacebookPixel } from './utils/facebookPixel';
+
+// initFacebookPixel();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
