@@ -25,7 +25,7 @@ const Perfil = () => {
         };
 
         GetUserData();
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);

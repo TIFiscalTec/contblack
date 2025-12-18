@@ -29,13 +29,13 @@ const WhatWeDo = (props) => {
                     {/* Lado Esquerdo */}
                     <motion.div
                         className="what-we-do-left"
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                         style={{
                             width: "48%",
-                            minWidth: "300px",
+                            minWidth: "250px",
                             padding: "20px 30px",
                             display: "flex",
                             flexDirection: "column",
@@ -75,7 +75,7 @@ const WhatWeDo = (props) => {
                     {/* Lado Direito (Accordions) */}
                     <motion.div
                         className="what-we-do-right"
-                        initial={{ opacity: 0, x: 50 }}
+                        initial={{ opacity: 0, x: 10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
@@ -86,7 +86,7 @@ const WhatWeDo = (props) => {
                         }}
                     >
                         {listAccordions.map((obj, i) => (
-                            <motion.div
+                            <div
                                 key={i}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -96,11 +96,11 @@ const WhatWeDo = (props) => {
                                 <Accordion
                                     sx={{
                                         marginBottom: "20px",
-                                        backgroundColor: "#233344", // fundo escuro do accordion
+                                        backgroundColor: "#1EFF86", // fundo escuro do accordion
                                         borderRadius: "8px",
                                         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                         '& .MuiAccordionSummary-root': {
-                                            backgroundColor: "lightgray", // verde neon no resumo
+                                            backgroundColor: "#1EFF86", // verde neon no resumo
                                             color: "#233344",            // texto escuro sobre o verde
                                             fontWeight: "bold",
                                             borderRadius: "8px 8px 0 0",
@@ -110,7 +110,7 @@ const WhatWeDo = (props) => {
                                             fontWeight: 600,
                                         },
                                         '& .MuiAccordionDetails-root': {
-                                            backgroundColor: "#1EFF86", // roxo como destaque do conteúdo
+                                            backgroundColor: "#60ffaaff", // roxo como destaque do conteúdo
                                             color: "black",              // texto branco sobre o roxo
                                             borderRadius: "0 0 8px 8px",
                                         },
@@ -128,7 +128,7 @@ const WhatWeDo = (props) => {
                                     </AccordionDetails>
                                 </Accordion>
 
-                            </motion.div>
+                            </div>
                         ))}
                     </motion.div>
                 </div>
@@ -211,7 +211,7 @@ const WhatWeDo = (props) => {
                         {/* </motion.div> */}
 
                         {/* Texto + botão */}
-                        <motion.div
+                        <div
                             className="conteudo-bloco"
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -252,7 +252,7 @@ const WhatWeDo = (props) => {
                             }} onClick={() => navigate("../Planos")}>
                                 Ver os planos
                             </Button>
-                        </motion.div>
+                        </div>
                     </div>
 
                     {/* Responsivo */}

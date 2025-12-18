@@ -21,10 +21,11 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { Box, Divider } from "@mui/material";
 
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 // import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
 import SimulacaoImpostos from "../components/SimulacaoImpostos";
 import { gerarLinkWhatsApp } from "../../utils/WhatsappLink";
+import Avaliacoes from "../components/Avaliacoes";
 // import { Divider } from "@mui/material";
 
 function Home() {
@@ -32,6 +33,34 @@ function Home() {
 
     const [cidades, setCidades] = useState([]);
     const [cidadesFiltered, setCidadesFiltered] = useState([]);
+    const carouselRef = useRef(null);
+
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        const cardWidth =
+            window.innerWidth < 600 ? 160 : 220; // largura do card + gap
+
+        let index = 0;
+
+        const interval = setInterval(() => {
+            index++;
+
+            if (index * cardWidth >= carousel.scrollWidth - carousel.clientWidth) {
+                index = 0;
+            }
+
+            carousel.scrollTo({
+                left: index * cardWidth,
+                behavior: "smooth"
+            });
+        }, 3000); // tempo entre slides
+
+        return () => clearInterval(interval);
+    }, []);
+
+
 
 
     useEffect(() => {
@@ -66,27 +95,11 @@ function Home() {
         { value: "GAMERS", img: "/assets/gamers.svg", desc: "Recebe da gringa? Faz live com donate? Temos planos pensados pra você escalar com segurança." },
     ];
 
-    const [nichoDesc, setNichoDesc] = useState("");
-    const [nichoTitle, setNichoTitle] = useState("");
     const plansRef = useRef(null);
 
-    const cardVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: i => ({
-            opacity: 1,
-            y: 0,
-            transition: { delay: i * 0.1, duration: 0.4 }
-        }),
-    };
 
     const scrollToPlans = () => {
         plansRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const textVariants = {
-        hidden: { opacity: 0, y: 10 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-        exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
     };
 
     const handleFilterCity = (input) => {
@@ -224,7 +237,7 @@ function Home() {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4, duration: 0.6 }}
-                                style={{ height: "fit-content", minHeight: "150px" }}
+                                style={{ height: "fit-content", minHeight: "150px", fontSize: "clamp(1.8rem, 4vw, 2.5rem)" }}
                             >
                                 Facilitamos a vida de{" "}
                                 <ReactTyped
@@ -336,6 +349,8 @@ function Home() {
                     />
                 </div>
             </div>
+
+            <Avaliacoes />
 
 
             <WhatWeDo scrollToPlans={scrollToPlans} />
@@ -631,57 +646,79 @@ function Home() {
                     </div>
                 </div>
 
-                <div style={{ width: "90%", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "30px", margin: "0 auto" }}>
-                    <div style={{ flex: "1 1 300px", maxWidth: "700px", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "20px" }}>
-                        {cards.map((obj, index) => (
-                            <div
-                                key={index}
-                                custom={index}
-                                variants={cardVariants}
-                                initial="hidden"
-                                animate="visible"
-                                style={{
-                                    width: window.innerWidth < 600 ? "100px" : "200px",
-                                    height: "150px",
-                                    borderRadius: "15px",
-                                    padding: "10px 20px",
-                                    textAlign: "center",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    cursor: "pointer",
-                                    color: "black"
-                                }}
-                                onMouseEnter={() => {
-                                    setNichoTitle(obj.value);
-                                    setNichoDesc(obj.desc);
-                                }}
-                                onMouseLeave={() => {
-                                    setNichoTitle("");
-                                    setNichoDesc("");
-                                }}
-                            >
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-                                    <img src={obj.img} alt={obj.value} style={{ maxWidth: "130px", borderRadius: "8px" }} />
-                                    <p style={{
-                                        lineHeight: "1",
-                                        fontWeight: "600",
-                                        fontSize: "0.9rem",
+                <div style={{ width: "100%", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "30px", margin: "0 auto" }}>
+                    <div
+                        style={{
+                            width: "100%",
+                            overflow: "hidden",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                width: "max-content",
+                                animation: "scrollLinear 25s linear infinite",
+                            }}
+                        >
+                            {[...cards, ...cards].map((obj, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        minWidth: window.innerWidth < 600 ? "140px" : "200px",
+                                        height: "150px",
+                                        borderRadius: "15px",
+                                        padding: "10px 20px",
                                         display: "flex",
-                                        color: "#233344",
                                         alignItems: "center",
-                                        gap: "4px", // espaçamento entre o texto e o ícone
-                                        margin: 0 // para evitar margens padrão do <p>
-                                    }}>
-                                        {obj.value}
-                                        <ArrowForwardIcon sx={{ width: "15px", height: "15px", color: "#1EFF86" }} />
-                                    </p>
+                                        justifyContent: "center",
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                        }}
+                                    >
+                                        <img
+                                            src={obj.img}
+                                            alt={obj.value}
+                                            style={{ maxWidth: "130px", borderRadius: "8px" }}
+                                        />
+
+                                        <p
+                                            style={{
+                                                margin: 0,
+                                                fontWeight: "600",
+                                                fontSize: "0.9rem",
+                                                color: "#233344",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "4px",
+                                            }}
+                                        >
+                                            {obj.value}
+                                            <ArrowForwardIcon sx={{ width: 15, height: 15, color: "#1EFF86" }} />
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+
+                        {/* CSS INLINE via <style> */}
+                        <style>
+                            {`
+                                @keyframes scrollLinear {
+                                    from { transform: translateX(0); }
+                                    to { transform: translateX(-50%); }
+                                }
+                            `}
+                        </style>
                     </div>
 
-                    <div style={{
+                    {/* <div style={{
                         flex: "1 1 300px",
                         maxWidth: "400px",
                         color: "#f9f2e4",
@@ -734,7 +771,7 @@ function Home() {
                                 </motion.div>
                             )}
                         </AnimatePresence>
-                    </div>
+                    </div> */}
                 </div>
             </section>
 

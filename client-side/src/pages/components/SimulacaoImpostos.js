@@ -17,6 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import { FormatToBrl } from "../../utils/FormatToBrl";
+import FormatarValor from "../../utils/FormatarValor";
 
 
 const Tabela = ({ titulo, dados, color }) => (
@@ -50,19 +51,17 @@ const Tabela = ({ titulo, dados, color }) => (
                             >
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                     {chave}
-                                    {chave === "Líquido" && (
-                                        <ArrowForwardIcon sx={{ color: "#1EFF86", fontSize: 18 }} />
-                                    )}
+                                    {chave === "Líquido" && (<ArrowForwardIcon sx={{ color: "#1EFF86", fontSize: 18 }} />)}
                                 </Box>
                             </TableCell>
                             <TableCell
                                 align="right"
                                 sx={{
-                                    color: "white",
-                                    fontWeight: chave === "Líquido" ? "bold" : "normal",
+                                    color: chave === "Total Imposto" || chave === "DAS/mês" || chave === "Imposto anual" ? "#ff2222ff" : chave === "Líquido" || chave === "Ganho/mês" || chave === "Ganho/ano" ? "#1EFF86" : "white",
+                                    fontWeight: chave === "Líquido" || chave === "Total Imposto" || chave === "Imposto anual" || chave === "DAS/mês" ? "bold" : "normal",
                                 }}
                             >
-                                {chave === "Carga Tributária" ? `${FormatToBrl(valor)}%` : chave === "IRRF" ? FormatToBrl(0) : FormatToBrl(valor)}
+                                {chave === "Carga Tributária" ? `${String(valor).replace(".", ",")}%` : chave === "IRPF" && Number(valor) === 0 ? FormatToBrl(0) : FormatToBrl(valor)}
                             </TableCell>
                         </TableRow>
                     ))}
@@ -78,35 +77,42 @@ export default function SimulacaoImpostos() {
     const [valor, setValor] = useState("");
 
     const [simulacao, setSimulacao] = useState({
-        CLT: {
-            Salário: "10.000,00",
-            INSS: "951,63",
-            IRRF: "1.656,85",
-            "Total Imposto": "2.608,48",
-            Líquido: "7.391,52",
+        "CLT": {
+            Salário: 10000,
+            INSS: 951.63,
+            IRPF: 1656.85,
+            "Total Imposto": 2608.48,
+            Líquido: 7391.52,
+            "Imposto anual": 31301.76,
         },
-        Autônomo: {
-            Rendimento: "10.000,00",
-            INSS: "951,63",
-            IRPF: "1.579,57",
-            "ISS (5%)": "500,00",
-            "Total Imposto": "3.031,20",
-            Líquido: "6.968,80",
-            "Carga Tributária": "30,31%",
+        "PF": {
+            Rendimento: 10000,
+            INSS: 951.63,
+            IRPF: 1579.57,
+            "ISS (5%)": 500,
+            "Total Imposto": 3031.20,
+            Líquido: 6968.80,
+            "Carga Tributária": 30.31,
+            "Imposto anual": 36374.40,
         },
-        "PJ SN": {
-            Receita: "10.000,00",
-            INSS: "308,00",
-            IRRF: "-",
-            DAS: "600,00",
-            "Total Imposto": "908,00",
-            Líquido: "9.092,00",
-            "Carga Tributária": "9,08%",
+        "PJ": {
+            Receita: 120000,
+            DAS: 7200,
+            // "Pró-labore": 1518,
+            // "INSS Pró-labore": 166.98,
+            // "IRPF Pró-labore": 0,
+            // "Lucro Distribuído": 7882,
+            "Total Imposto": 7200,
+            Líquido: 112633,
+            "Carga Tributária": 6,
+            "DAS/mês": 600,
+            "Imposto anual": 7200,
         },
     });
 
     const handleValueChange = (e) => {
-        setValor(e.target.value);
+        const valorFormatado = FormatarValor(e.target.value)
+        setValor(valorFormatado);
     };
 
     const handleCalc = () => {
@@ -121,7 +127,7 @@ export default function SimulacaoImpostos() {
         const TETO_INSS = 7786.02;
 
         let inssClt = 0;
-        let irrfClt = 0;
+        let IRPFClt = 0;
 
         // ===== AUTÔNOMO =====
         const baseInssAut = Math.min(salario, TETO_INSS);
@@ -146,22 +152,22 @@ export default function SimulacaoImpostos() {
         inssAut = Number(inssAut.toFixed(2));
         issAut = Number(issAut.toFixed(2));
 
-        // ===== IRRF CLT =====
-        const baseIrrfClt = salario - inssClt - 528;
+        // ===== IRPF CLT =====
+        const baseIRPFClt = salario - inssClt - 528;
 
-        if (baseIrrfClt <= 2428.80) {
-            irrfClt = 0;
-        } else if (baseIrrfClt <= 2826.65) {
-            irrfClt = baseIrrfClt * 0.075 - 182.16;
-        } else if (baseIrrfClt <= 3751.05) {
-            irrfClt = baseIrrfClt * 0.15 - 394.16;
-        } else if (baseIrrfClt <= 4664.68) {
-            irrfClt = baseIrrfClt * 0.225 - 675.49;
+        if (baseIRPFClt <= 2428.80) {
+            IRPFClt = 0;
+        } else if (baseIRPFClt <= 2826.65) {
+            IRPFClt = baseIRPFClt * 0.075 - 182.16;
+        } else if (baseIRPFClt <= 3751.05) {
+            IRPFClt = baseIRPFClt * 0.15 - 394.16;
+        } else if (baseIRPFClt <= 4664.68) {
+            IRPFClt = baseIRPFClt * 0.225 - 675.49;
         } else {
-            irrfClt = baseIrrfClt * 0.275 - 908.73;
+            IRPFClt = baseIRPFClt * 0.275 - 908.73;
         }
 
-        irrfClt = Math.max(0, Number(irrfClt.toFixed(2)));
+        Math.max(0, Number(IRPFClt.toFixed(2)))
 
         // ===== IRPF AUTÔNOMO =====
         const baseIrpfAut = salario - inssAut - 528;
@@ -181,10 +187,34 @@ export default function SimulacaoImpostos() {
         irpfAut = Math.max(0, Number(irpfAut.toFixed(2)));
 
         // ===== PJ SIMPLES =====
-        const aliquotaSimples = 0.06;
         const proLabore = 1518;
+        let impostoSimples = 0;
 
-        const impostoSimples = salario * aliquotaSimples;
+        let receita = salario * 12;
+        let aliPj = 0;
+
+        if (receita <= 180000) {
+            impostoSimples = (receita * 0.06);
+            aliPj = 6;
+        } else if (receita <= 360000) {
+            impostoSimples = (receita * 0.112) - 9360;
+            aliPj = 11.2;
+        } else if (receita <= 720000) {
+            impostoSimples = (receita * 0.135) - 17640;
+            aliPj = 13.5;
+        } else if (receita <= 1800000) {
+            impostoSimples = (receita * 0.16) - 35640;
+            aliPj = 16;
+        } else if (receita <= 3600000) {
+            impostoSimples = (receita * 0.21) - 125640;
+            aliPj = 21;
+        } else {
+            impostoSimples = (receita * 0.33) - 648000;
+            aliPj = 33;
+        }
+
+        impostoSimples = receita * (aliPj / 100);
+
 
         // INSS pró-labore com teto
         const baseInssProLabore = Math.min(proLabore, TETO_INSS);
@@ -202,7 +232,7 @@ export default function SimulacaoImpostos() {
         irpfProLabore = Math.max(0, Number(irpfProLabore.toFixed(2)));
 
         // ===== TOTAIS =====
-        const totalClt = inssClt + irrfClt;
+        const totalClt = inssClt + IRPFClt;
         const liquidoClt = salario - totalClt;
 
         const totalAut = inssAut + irpfAut + issAut;
@@ -211,26 +241,24 @@ export default function SimulacaoImpostos() {
         const proLaboreLiquido =
             proLabore - inssProLabore - irpfProLabore;
 
-        const lucroDistribuido =
-            salario - impostoSimples - proLabore;
+        const lucroDistribuido = receita - impostoSimples - proLabore;
 
-        const liquidoPj =
-            proLaboreLiquido + lucroDistribuido;
+        const liquidoPj = proLaboreLiquido + lucroDistribuido;
 
-        const totalImpostoPj =
-            impostoSimples + inssProLabore + irpfProLabore;
+        const totalImpostoPj = impostoSimples;
 
         setSimulacao((prev) => ({
             ...prev,
-            CLT: {
+            "CLT": {
                 Salário: salario,
                 INSS: inssClt,
-                IRRF: irrfClt,
+                IRPF: IRPFClt,
                 "Total Imposto": totalClt,
                 Líquido: liquidoClt,
                 "Carga Tributária": Number(((totalClt / salario) * 100).toFixed(2)),
+                "Imposto anual": Number((totalClt * 12).toFixed(2)),
             },
-            Autônomo: {
+            "PF": {
                 Rendimento: salario,
                 INSS: inssAut,
                 IRPF: irpfAut,
@@ -238,17 +266,18 @@ export default function SimulacaoImpostos() {
                 "Total Imposto": totalAut,
                 Líquido: liquidoAut,
                 "Carga Tributária": Number(((totalAut / salario) * 100).toFixed(2)),
+                "Imposto anual": Number((totalAut * 12).toFixed(2)),
             },
-            "PJ SN": {
-                Receita: salario,
+            "PJ": {
+                Receita: receita,
                 DAS: Number(impostoSimples.toFixed(2)),
-                "Pró-labore": proLabore,
-                "INSS Pró-labore": inssProLabore,
-                "IRPF Pró-labore": irpfProLabore,
-                "Lucro Distribuído": Number(lucroDistribuido.toFixed(2)),
+                // "IRPF Pró-labore": irpfProLabore,
+                // "Lucro Distribuído": Number(lucroDistribuido.toFixed(2)),
                 "Total Imposto": Number(totalImpostoPj.toFixed(2)),
                 Líquido: Number(liquidoPj.toFixed(2)),
-                "Carga Tributária": Number(((totalImpostoPj / salario) * 100).toFixed(2)),
+                "Carga Tributária": aliPj,
+                "DAS/mês": Number((impostoSimples / 12).toFixed(2)),
+                "Imposto anual": Number((totalImpostoPj).toFixed(2)),
             },
         }));
     };
@@ -284,7 +313,7 @@ export default function SimulacaoImpostos() {
                         id="outlined-adornment-amount"
                         startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                         label="Valor"
-                        placeholder="Informe o valor"
+                        placeholder="Informe o valor mensal"
                         value={valor}
                         onChange={handleValueChange}
                         sx={{ fontWeight: 600 }}
@@ -323,6 +352,9 @@ export default function SimulacaoImpostos() {
                     </Grid>
                 ))}
             </Grid>
+            <div style={{ width: "100%", textAlign: "center", marginTop: "24px", fontSize: "0.775rem", color: "#666" }}>
+                <p>Os valores apresentados acima são estimativas e podem variar conforme regras fiscais, enquadramento tributário, deduções e particularidades de cada caso.</p>
+            </div>
         </Box>
     );
 }
