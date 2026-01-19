@@ -95,61 +95,86 @@ const MudarPlano = () => {
                 if (response.data.status === 200) {
                     const data = response.data.data;
 
-                    // Lista completa de vantagens possíveis
-                    const todasAsVantagens = [
-                        "Elaboração e entrega de obrigações fiscais para até 1 pessoa física.",
-                        "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até R$81.000/ano).",
-                        "Atendimento personalizado em horário comercial.",
-                        "Folha de pagamento de até 2 colaboradores.",
-                        "Elaboração e entrega de obrigações fiscais para 2 pessoas físicas.",
-                        "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica no regime SIMPLES NACIONAL.",
-                        "Folha de pagamento de até 6 colaboradores.",
-                        "Emissão de até 35 NFs/mês (sob demanda).",
-                        "Grupo Exclusivo no WhatsApp.",
-                        "Emissão de até 70 NFs/mês (sob demanda).",
-                        "1 consultoria de até 4h por mês com emissão de parecer.",
-                    ];
-
                     // Define quais vantagens cada plano tem
                     const vantagensPorPlano = {
                         1: [
-                            "Elaboração e entrega de obrigações fiscais para até 1 pessoa física.",
-                            "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até R$81.000/ano)."
+                            { label: "Faturamento de até R$ 6.750/mês.", icon: <CheckIcon color="success" /> },
+                            { label: "1 titular.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão de até 3 notas fiscais/mês pelo Emissor Fácil (cliente).", icon: <CheckIcon color="success" /> },
+                            { label: "Abertura de CNPJ MEI inclusa.", icon: <CheckIcon color="success" /> },
+                            { label: "Fiscal e contábeis básico. Apuração e envio do DAS e conferência básica das informações.", icon: <CheckIcon color="success" /> },
+                            { label: "1 reunião anual, sob demanda.", icon: <CheckIcon color="success" /> },
+                            { label: "Funcionários ou pró-labore.", icon: <CloseIcon color="error" /> },
+                            { label: "Declaração de IRPF do sócio.", icon: <CloseIcon color="error" /> },
+                            { label: "Emissão de notas fiscais pela Contblack.", icon: <CloseIcon color="error" /> },
+                            { label: "Grupo exclusivo no WhatsApp.", icon: <CloseIcon color="error" /> },
+                            { label: "Planejamento patrimonial.", icon: <CloseIcon color="error" /> },
+                            { label: "Certificado digital.", icon: <CloseIcon color="error" /> },
                         ],
                         2: [
-                            "Elaboração e entrega de obrigações fiscais para até 1 pessoa física.",
-                            "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até R$81.000/ano).",
-                            "Atendimento personalizado em horário comercial."
+                            { label: "Faturamento de até R$ 30.000/mês.", icon: <CheckIcon color="success" /> },
+                            { label: "1 titular.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão de até 50 notas fiscais/mês pelo Emissor Fácil (cliente).", icon: <CheckIcon color="success" /> },
+                            { label: "Abertura de CNPJ SN inclusa.", icon: <CheckIcon color="success" /> },
+                            { label: "Obrigações fiscais e contábeis completas dentro do Simples Nacional", icon: <CheckIcon color="success" /> },
+                            { label: "2 reuniões anuais, sob demanda.", icon: <CheckIcon color="success" /> },
+                            { label: "Pró-labore + 1 colaborador.", icon: <CheckIcon color="success" /> },
+                            { label: "Declaração de IRPF do sócio (condicional)*.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão de notas fiscais pela Contblack.", icon: <CloseIcon color="error" /> },
+                            { label: "Grupo exclusivo no WhatsApp.", icon: <CloseIcon color="error" /> },
+                            { label: "Planejamento patrimonial.", icon: <CloseIcon color="error" /> },
+                            { label: "Certificado digital.", icon: <CloseIcon color="error" /> },
                         ],
                         3: [
-                            "Elaboração e entrega de obrigações fiscais para até 1 pessoa física.",
-                            "Constituição e entrega de obrigações fiscais para até 1 pessoa jurídica MEI (faturamento de até R$81.000/ano).",
-                            "Atendimento personalizado em horário comercial.",
-                            "Folha de pagamento de até 2 colaboradores.",
-                            "Elaboração e entrega de obrigações fiscais para 2 pessoas físicas."
+                            { label: "Faturamento de até R$ 100.000/mês.", icon: <CheckIcon color="success" /> },
+                            { label: "Até 2 sócios.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão ilimitada de notas fiscais/mês pelo Emissor Fácil (cliente).", icon: <CheckIcon color="success" /> },
+                            { label: "Abertura de CNPJ SN inclusa.", icon: <CheckIcon color="success" /> },
+                            { label: "Obrigações fiscais e contábeis completas dentro do Simples Nacional", icon: <CheckIcon color="success" /> },
+                            { label: "1 reunião mensal, sob demanda.", icon: <CheckIcon color="success" /> },
+                            { label: "Pró-labore + 2 colaboradores.", icon: <CheckIcon color="success" /> },
+                            { label: "Declaração de IRPF do sócio (condicional)*.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão de até 15 notas fiscais/mês pela Contblack.", icon: <CheckIcon color="success" /> },
+                            { label: "Grupo exclusivo no WhatsApp.", icon: <CheckIcon color="success" /> },
+                            { label: "Planejamento patrimonial com 20% de desconto.", icon: <CheckIcon color="success" /> },
+                            { label: "Certificado digital.", icon: <CheckIcon color="success" /> },
                         ],
-                        4: todasAsVantagens // plano completo
+                        4: [
+                            { label: "Faturamento de até R$ 400.000/mês.", icon: <CheckIcon color="success" /> },
+                            { label: "Até 3 sócios.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão ilimitada de notas fiscais/mês pelo Emissor Fácil (cliente).", icon: <CheckIcon color="success" /> },
+                            { label: "Abertura de CNPJ SN inclusa.", icon: <CheckIcon color="success" /> },
+                            { label: "Obrigações fiscais e contábeis completas dentro do Simples Nacional", icon: <CheckIcon color="success" /> },
+                            { label: "1 reunião quinzenal, sob demanda.", icon: <CheckIcon color="success" /> },
+                            { label: "Pró-labore + 3 colaboradores.", icon: <CheckIcon color="success" /> },
+                            { label: "Declaração de IRPF do sócio (condicional)*.", icon: <CheckIcon color="success" /> },
+                            { label: "Emissão de até 50 notas fiscais/mês pela Contblack.", icon: <CheckIcon color="success" /> },
+                            { label: "Grupo exclusivo no WhatsApp.", icon: <CheckIcon color="success" /> },
+                            { label: "Planejamento patrimonial com 50% de desconto.", icon: <CheckIcon color="success" /> },
+                            { label: "Certificado digital.", icon: <CheckIcon color="success" /> },
+                        ]
                     };
 
                     // Mapeia cada plano, adicionando os chips
                     const planosComChips = data.map((plano) => {
                         const vantagensDoPlano = vantagensPorPlano[plano.idPlano] || [];
 
-                        const chips = todasAsVantagens.map((vantagem) => ({
-                            label: vantagem,
-                            icon: vantagensDoPlano.includes(vantagem)
-                                ? <CheckIcon color="success" />
-                                : <CloseIcon color="error" />
+                        // Cria os chips com base nas vantagens
+                        const chips = vantagensDoPlano.map((vantagem) => ({
+                            label: vantagem.label,
+                            icon: vantagem.icon,
                         }));
 
                         return {
                             ...plano,
-                            chips,
+                            chips, // Adiciona o array de chips ao plano
                         };
                     });
+
                     console.log(planosComChips);
-                    setObjPlanos(planosComChips);
+                    setObjPlanos(planosComChips); // Atualiza o estado com os planos e chips
                 }
+
             } catch (err) {
                 console.error("Erro ao buscar planos:", err);
             }

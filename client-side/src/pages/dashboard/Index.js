@@ -17,10 +17,11 @@ import ModalNotificacao from "./components/ModalNotificacao";
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import DescriptionIcon from '@mui/icons-material/Description';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
+import HomeIcon from '@mui/icons-material/Home';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 
-const DashboardCard = ({ icon, color, title, value, onClick, warning }) => (
-    <Card onClick={onClick} sx={{ width: { xs: "320px", sm: "300px" }, height: "fit-content", borderRadius: "16px", boxShadow: "0 8px 16px rgba(0,0,0,0.05)", transition: "0.3s ease", cursor: onClick ? "pointer" : "default", "&:hover": { transform: onClick ? "scale(1.05)" : "none" }, }} >
+const DashboardCard = ({ icon, color, title, value, onClick, warning, manutencao }) => (
+    <Card onClick={onClick} sx={{ background: manutencao ? "gray" : "white", width: { xs: "320px", sm: "300px" }, height: "fit-content", borderRadius: "16px", boxShadow: "0 8px 16px rgba(0,0,0,0.05)", transition: "0.3s ease", cursor: onClick ? "pointer" : "default", "&:hover": { transform: onClick ? "scale(1.05)" : "none" }, }} >
         <CardContent>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 {React.cloneElement(icon, { sx: { fontSize: 32, color } })}
@@ -40,7 +41,7 @@ const DashboardCard = ({ icon, color, title, value, onClick, warning }) => (
     </Card>
 );
 
-const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModalNotificacao, notificacoes, showModal, setShowModal, openModalFirstTime, setOpenModalFirstTime, loading, openModalAssinaturaCancelada, setOpenModalAssinaturaCancelada, openModalAssinaturaReativada, setOpenModalAssinaturaReativada }) => {
+const DashboardContent = ({ user, manutencao, userActive, setOpenModalNotificacao, openModalNotificacao, notificacoes, showModal, setShowModal, openModalFirstTime, setOpenModalFirstTime, loading, openModalAssinaturaCancelada, setOpenModalAssinaturaCancelada, openModalAssinaturaReativada, setOpenModalAssinaturaReativada }) => {
     const navigate = useNavigate();
     const isMobile = useMediaQuery("(max-width:768px)");
     const { setIsOpen } = useTour();
@@ -66,9 +67,10 @@ const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModal
                     <Grid container spacing={3} sx={{ mb: 3, justifyContent: "flex-start" }}>
                         <Grid xs={12} sm={6} md={4} id="emitirNota">
                             <DashboardCard
+                                manutencao={manutencao}
                                 icon={<ReceiptIcon />}
                                 color="#901CB3"
-                                title="Emitir nota fiscal"
+                                title={manutencao ? "Emitir nota fiscal (Em Revisão)" : "Emitir nota fiscal"}
                                 value={
                                     `${user?.notasEmitidasEsteMes || 0}/${user?.plano?.qtdNfseMensalUsuario === -1
                                         ? "∞"
@@ -86,7 +88,7 @@ const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModal
                                     const emitidas = user?.notasEmitidasEsteMes || 0;
                                     const podeEmitir = user?.empresa && (limite === -1 || emitidas < (limite ?? 0));
 
-                                    if (podeEmitir) {
+                                    if (podeEmitir && !manutencao) {
                                         navigate("../Dashboard/EmitirNotaServico");
                                     }
                                 }}
@@ -148,7 +150,7 @@ const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModal
                                 icon={<TrendingUp />}
                                 color="#d32f2f"
                                 title="Faturas Pendentes"
-                                value={user?.faturas?.pendentes?.length || "0"}
+                                value={user?.faturas?.pendentes?.length || user?.faturas?.vencidas?.length || "0"}
                                 onClick={() => navigate("../Dashboard/Faturas/Pendentes")}
                             />
                         </Grid>
@@ -193,6 +195,15 @@ const DashboardContent = ({ user, userActive, setOpenModalNotificacao, openModal
                                 onClick={() => navigate("../Dashboard/Assinatura")}
                             />
                         </Grid>
+                        <Grid xs={12} sm={6} md={4} id="plano">
+                            <DashboardCard
+                                icon={<HomeIcon />}
+                                color="black"
+                                title="Em Desenvolvimento"
+                                value={"Endereço fiscal"}
+                                // onClick={() => navigate("../Dashboard/ApresentacaoEnderecoFiscal")}
+                            />
+                        </Grid>
                     </Grid>
                     <Divider />
                 </div>
@@ -232,6 +243,7 @@ const Dashboard = () => {
     const [notificacoes, setNotificacoes] = useState([]);
     const [openModalAssinaturaCancelada, setOpenModalAssinaturaCancelada] = useState(false);
     const [openModalAssinaturaReativada, setOpenModalAssinaturaReativada] = useState(false);
+    const [manutencao, setManutencao] = useState(false);
 
     const token = localStorage.getItem("token");
 
@@ -365,6 +377,7 @@ const Dashboard = () => {
         }}>
             <DashboardContent
                 user={user}
+                manutencao={manutencao}
                 userActive={userActive}
                 setOpenModalNotificacao={setOpenModalNotificacao}
                 openModalNotificacao={openModalNotificacao}

@@ -235,8 +235,8 @@ const Certificado = () => {
         setCnpj(MascaraCnpj(e.target.value));
         if (e.target.value.length === 18) {
             setOpen(true);
-            console.log(TirarMascara(cnpj))
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/buscarCnpj/${TirarMascara(cnpj)}`, {
+            console.log(TirarMascara(e.target.value))
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/buscarCnpj/${TirarMascara(e.target.value)}`, {
                 headers: { Authorization: token },
             });
             if (response.data.status === 200) {
@@ -315,8 +315,8 @@ const Certificado = () => {
             const dadosEnderecoViaCep = await axios.get(`https://viacep.com.br/ws/${cep.replace(/\D/g, "")}/json/`);
             let objetoPlugNotas = {
                 "cpfCnpj": cnpj.replace(/\D/g, ""),
-                "inscricaoMunicipal": inscricaoMunicipal,
-                "inscricaoEstadual": inscricaoEstadual,
+                "inscricaoMunicipal": "", // inscricaoMunicipal
+                "inscricaoEstadual": "", // inscricaoEstadual
                 "razaoSocial": razaoSocial,
                 "nomeFantasia": nomeFantasia,
                 "certificado": null,
@@ -347,7 +347,42 @@ const Certificado = () => {
                 "nfse": {
                     "ativo": true,
                     "tipoContrato": 0,
-                },
+                    "config": {
+                        "producao": true,
+                        "nfseNacional": true,
+                        "consultaNfseNacional": true,
+                        "consultaDfe": {
+                            "prestador": true,
+                            "tomador": true,
+                            "intermediario": true
+                        },
+                        "rps": {
+                            "numero": 1,
+                            "serie": "RPS",
+                            "numeracaoAutomatica": true,
+                            "agrupaLoteAutomatico": false,
+                            "agrupaLoteComSerieAutomatico": false
+                        },
+                        "prefeitura": {
+                            "login": "",
+                            "senha": "",
+                            "receitaBruta": 0,
+                            "lei": "string",
+                            "dataInicio": ""
+                        },
+                        "email": {
+                            "envio": true
+                        },
+                        "calculoAutomaticoIbpt": {
+                            "ativo": true
+                        },
+                        "enviarNotificacaoProcessamento": {
+                            "webhook": true,
+                            "email": true,
+                            "destinatarios": []
+                        }
+                    }
+                }
             }
             const objetoReq = {
                 objetoPlugNotas,
@@ -605,8 +640,8 @@ const Certificado = () => {
                                 <span style={{ color: "gray", fontSize: "0.75rem" }}>Todos os campos marcados com (*) são obrigatórios.</span>
                                 <TextField fullWidth size="small" error={erroCnpj} value={cnpj} onChange={e => handleCnpj(e)} margin="dense" label="Cnpj da Empresa" variant="outlined" required helperText="Digite o CNPJ da empresa" placeholder="Digite o CNPJ da empresa" autoComplete="off" />
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10, flexWrap: 'wrap' }}>
-                                    <TextField style={{ width: window.innerWidth < 600 ? '100%' : '49%' }} value={inscricaoEstadual} onChange={e => setInscricaoEstadual(e.target.value)} size="small" margin="dense" label="Inscrição estadual" variant="outlined" helperText="Digite a Inscrição estadual" placeholder="Digite a Inscrição estadual" autoComplete="off" />
-                                    <TextField style={{ width: window.innerWidth < 600 ? '100%' : '49%' }} required error={erroInscricaoMunicipal} value={inscricaoMunicipal} onChange={e => setInscricaoMunicipal(e.target.value)} size="small" margin="dense" label="Inscrição municipal" variant="outlined" helperText="Digite a Inscrição municipal" placeholder="Digite a Inscrição municipal" autoComplete="off" />
+                                    <TextField style={{ width: window.innerWidth < 600 ? '100%' : '49%' }} disabled value={inscricaoEstadual} onChange={e => setInscricaoEstadual(e.target.value)} size="small" margin="dense" label="Inscrição estadual" variant="outlined" helperText="Digite a Inscrição estadual" placeholder="Digite a Inscrição estadual" autoComplete="off" />
+                                    <TextField style={{ width: window.innerWidth < 600 ? '100%' : '49%' }} disabled required error={erroInscricaoMunicipal} value={inscricaoMunicipal} onChange={e => setInscricaoMunicipal(e.target.value)} size="small" margin="dense" label="Inscrição municipal" variant="outlined" helperText="Digite a Inscrição municipal" placeholder="Digite a Inscrição municipal" autoComplete="off" />
                                 </div>
                                 <TextField fullWidth size="small" margin="dense" label="Razão Social da Empresa" error={erroRazaoSocial} value={razaoSocial} onChange={e => setRazaoSocial(e.target.value)} variant="outlined" required helperText="Digite a razão social da empresa" placeholder="Digite a razão social da empresa" autoComplete="off" />
                                 <TextField fullWidth size="small" margin="dense" label="Nome Fantasia da Empresa" value={nomeFantasia} onChange={e => setNomeFantasia(e.target.value)} variant="outlined" helperText="Digite o nome fantasia da empresa" placeholder="Digite o nome fantasia da empresa" autoComplete="off" />

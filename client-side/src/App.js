@@ -27,6 +27,10 @@ import PoliticaPrivacidade from './pages/politicaDePrivacidade/Index';
 import TermosUso from './pages/termosDeUso/Index';
 import MetodoPagamento from './pages/dashboard/components/MetodoPagamento';
 import ApresentacaoContblack from './pages/apresentacaoContblack/ApresentacaoContblack';
+import ApresentacaoEnderecoFiscal from './pages/dashboard/components/enderecoFiscal/ApresentacaoEnderecoFiscal';
+import AssinarContratoEnderecoFiscal from './pages/dashboard/components/enderecoFiscal/AssinarContratoEnderecoFiscal';
+import CheckoutEnderecoFiscal from './pages/dashboard/components/enderecoFiscal/CheckoutEnderecoFiscal';
+import ResidenciaFiscal from './pages/dashboard/components/enderecoFiscal/ResidenciaFiscal';
 
 import { UserProvider } from './contexts/UserContext';
 import { DiscountProvider } from './contexts/DiscountContext';
@@ -63,6 +67,10 @@ function App() {
 						<Route path="/resetarSenha" element={<ResetarSenha />} />
 						<Route path="/CancelarAssinatura" element={<CancelarAssinatura />} />
 						<Route path="/Dashboard/Certificado" element={<Certificado />} />
+						<Route path="/Dashboard/ApresentacaoEnderecoFiscal" element={<ApresentacaoEnderecoFiscal />} />
+						<Route path="/Dashboard/AssinarContratoEnderecoFiscal" element={<AssinarContratoEnderecoFiscal />} />
+						<Route path="/Dashboard/CheckoutEnderecoFiscal" element={<CheckoutEnderecoFiscal />} />
+						<Route path="/Dashboard/ResidenciaFiscal" element={<ResidenciaFiscal />} />
 						<Route path="/politica-de-privacidade" element={<PoliticaPrivacidade />} />
 						<Route path="/termos-de-uso" element={<TermosUso />} />
 						<Route path="/apresentacao-contblack" element={<ApresentacaoContblack />} />

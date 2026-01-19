@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
 
@@ -47,6 +47,7 @@ const Register = () => {
 
     const [isMobile, setIsMobile] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
+    const [pause, setPause] = useState(false);
 
     const [nome, setNome] = useState("");
     const [nomeError, setNomeError] = useState(false);
@@ -269,7 +270,7 @@ const Register = () => {
         return (
             <div style={{ width: "100%" }}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "50px 10px 10px" }}>
-                    <TextField label="Nome" style={{ width: "60%" }} variant="outlined" fullWidth size="small" onChange={(e) => setNome(e.target.value)} value={CapitalizeWords(nome)} error={nomeError} helperText={nomeError ? "Nome é obrigatório" : ""} required />
+                    <TextField label="Nome Completo" style={{ width: "60%" }} variant="outlined" fullWidth size="small" onChange={(e) => setNome(e.target.value)} value={CapitalizeWords(nome)} error={nomeError} helperText={nomeError ? "Nome é obrigatório" : ""} required />
                     <TextField label="Telefone (WhatsApp)" style={{ width: "37%" }} variant="outlined" size="small" required sx={{ width: isMobile ? "100%" : "40%" }} value={telefone} onChange={(e) => setTelefone(MascaraTelefone(e.target.value))} placeholder="(00) 00000-0000" error={telefoneError} helperText={telefoneError ? "Telefone é obrigatório" : ""} />
                 </div>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 10px 10px" }}>
@@ -542,6 +543,8 @@ const Register = () => {
         };
 
         try {
+            setPause(true);
+
             const cadastroResponse = await api.post("/cadastro", dadosCadastro);
 
             if (cadastroResponse.status === 200) {
@@ -565,7 +568,7 @@ const Register = () => {
 
             console.log("Contrato gerado:", contratoResponse.data);
 
-            setOpen(false);
+            setPause(false);
             fetchLogin();
             navigate("../assinarContrato");
 
@@ -577,6 +580,7 @@ const Register = () => {
             if (status === 401 || status === 404) {
                 setOpenSnackbarError(true);
                 setMensagem("E-mail ou senha incorretos ou problema ao gerar contrato.");
+
             } else {
                 setOpenSnackbarError(true);
                 setMensagem("Ocorreu um erro inesperado. Tente novamente mais tarde.");
@@ -714,7 +718,8 @@ const Register = () => {
                         setMensagem("As senhas não coincidem.");
                         isValid = false;
                     } else {
-                        HandleRegister();
+                        setCurrentStep((prev) => Math.min(prev + 1, 6));
+                        await HandleRegister();
                     }
                 } else {
                     setSenhaConfirmError(true);
@@ -733,6 +738,7 @@ const Register = () => {
             await salvarLead(currentStep);
             setCurrentStep((prev) => Math.min(prev + 1, 5));
         }
+        console.log(currentStep)
     };
 
 
@@ -913,7 +919,6 @@ const Register = () => {
                             }}>
                             {currentStep === 5 ? "Finalizar" : "Próximo"}
                         </Button>
-
                     </div>
                 </div>
             </div>

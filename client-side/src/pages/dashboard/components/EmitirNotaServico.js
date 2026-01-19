@@ -20,6 +20,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { MascaraValor } from '../../../utils/MascaraValor';
+import AlertError from '../../components/AlertError';
+import AlertSuccess from '../../components/AlertSuccess';
 
 const estados = [
     "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -50,6 +52,10 @@ const EmitirNotaServico = () => {
     const [valorServico, setValorServico] = useState('0');
     const [descontoCondicionado, setDescontoCondicionado] = useState('0');
     const [descontoIncondicionado, setDescontoIncondicionado] = useState('0');
+    const [openSnackbarError, setOpenSnackbarError] = useState(false);
+    const [openSnackbarSuccess, setOpenSnackbarSuccess] = useState(false);
+    const [mensagem, setMensagem] = useState('');
+
 
     const [tipoTributacao, setTipoTributacao] = useState('');
     const [exigibilidade, setExigibilidade] = useState('');
@@ -96,7 +102,8 @@ const EmitirNotaServico = () => {
             );
 
             if (!data) {
-                alert("CNPJ não encontrado na base da PlugNotas.");
+                setMensagem("CNPJ não encontrado.");
+                setOpenSnackbarError(true);
                 return;
             }
 
@@ -111,10 +118,8 @@ const EmitirNotaServico = () => {
             setEstadoTomador(data.endereco?.uf || "");
         } catch (error) {
             console.error("Erro ao buscar CNPJ:", error);
-            alert(
-                error.response?.data?.mensagem ||
-                "Erro ao buscar CNPJ. Verifique se o número está correto ou tente novamente mais tarde."
-            );
+            setMensagem("Erro ao buscar CNPJ. Verifique se o número está correto ou tente novamente mais tarde.");
+            setOpenSnackbarError(true);
         } finally {
             setOpen(false);
         }
@@ -125,19 +130,22 @@ const EmitirNotaServico = () => {
         let body = {}
 
         if (!servicoSelecionado) {
-            alert('Por favor, selecione o serviço prestado.');
+            setMensagem('Por favor, selecione o serviço prestado.');
+            setOpenSnackbarError(true);
             return;
         }
 
         if (!valorServico || Number(valorServico.replace(/\./g, '').replace(',', '.')) <= 0) {
-            alert('Por favor, insira um valor válido para o serviço.');
+            setMensagem('Por favor, insira um valor válido para o serviço.');
+            setOpenSnackbarError(true);
             return;
         }
 
 
         if (hasTomador) {
             if (!cpfCnpjTomador || !razaoSocialTomador) {
-                alert('Por favor, preencha todos os dados do tomador.');
+                setMensagem('Por favor, preencha todos os dados do tomador.');
+                setOpenSnackbarError(true);
                 return;
             }
             body = {
@@ -182,7 +190,8 @@ const EmitirNotaServico = () => {
         console.log(response.data);
         if (response.data.status === 200) {
             setOpen(false);
-            alert('Nota fiscal emitida com sucesso!');
+            setMensagem('Nota fiscal emitida com sucesso!');
+            setOpenSnackbarSuccess(true);
             setAliquota('');
             setExigibilidade('');
             setTipoTributacao('');
@@ -202,7 +211,8 @@ const EmitirNotaServico = () => {
             setBairroTomador('');
         } else {
             setOpen(false);
-            alert('Erro ao emitir nota fiscal: ' + response.data);
+            setMensagem('Erro ao emitir nota fiscal: ' + response.data);
+            setOpenSnackbarError(true);
         }
     }
 
@@ -336,15 +346,15 @@ const EmitirNotaServico = () => {
                                             label="Tipo tributação"
                                             onChange={e => setTipoTributacao(e.target.value)}
                                         >
-                                            <MenuItem value={0}>Não definido</MenuItem>
+                                            {/* <MenuItem value={0}>Não definido</MenuItem> */}
                                             <MenuItem value={1}>Isento de ISS</MenuItem>
                                             <MenuItem value={2}>Imune</MenuItem>
                                             <MenuItem value={3}>Não Incidência no Município</MenuItem>
                                             <MenuItem value={4}>Não Tributável</MenuItem>
-                                            <MenuItem value={5}>Retido</MenuItem>
+                                            {/* <MenuItem value={5}>Retido</MenuItem> */}
                                             <MenuItem value={6}>Tributável Dentro do Município</MenuItem>
                                             <MenuItem value={7}>Tributável Fora do Município</MenuItem>
-                                            <MenuItem value={8}>Tributável Dentro do Município pelo tomador</MenuItem>
+                                            {/* <MenuItem value={8}>Tributável Dentro do Município pelo tomador</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                     <FormControl disabled={!servicoSelecionado} style={{ width: window.innerWidth < 600 ? '100%' : '33%' }} size='small'>
@@ -377,6 +387,8 @@ const EmitirNotaServico = () => {
                 </div>
             </div>
             <Loading open={open} setOpen={setOpen} />
+            <AlertError openSnackbarError={openSnackbarError} setOpenSnackbarError={setOpenSnackbarError}  mensagem={mensagem} />
+            <AlertSuccess openSnackbarSuccess={openSnackbarSuccess} setOpenSnackbarSuccess={setOpenSnackbarSuccess}  mensagem={mensagem} />
         </>
     )
 }

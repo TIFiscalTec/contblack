@@ -29,6 +29,8 @@ import FormatDateHour from "../../../utils/FormatDateHour";
 import CancelIcon from '@mui/icons-material/Cancel';
 import { MascaraValor } from "../../../utils/MascaraValor";
 import Loading from "../../components/Loading";
+import AlertError from "../../components/AlertError";
+import AlertSuccess from "../../components/AlertSuccess";
 
 
 const NotasFiscaisEmitidas = () => {
@@ -45,6 +47,9 @@ const NotasFiscaisEmitidas = () => {
     const [notasFiscais, setNotasFiscais] = useState([])
     const [idServico, setIdServico] = useState(null);
     const [open, setOpen] = useState(false);
+    const [openSnackbarError, setOpenSnackbarError] = useState(false);
+    const [mensagem, setMensagem] = useState("");
+    const [openSnackbarSuccess, setOpenSnackbarSuccess] = useState(false);
 
     useEffect(() => {
         // Verifica se o usuário está com servico vencida
@@ -94,20 +99,52 @@ const NotasFiscaisEmitidas = () => {
     const handleCancelNota = async (idIntegracao) => {
         try {
             setOpen(true);
-            await axios.post(`${process.env.REACT_APP_API_URL}/cancelarNotaFiscal`, { idIntegracao }, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/cancelarNotaFiscal`, { idIntegracao }, {
                 headers: {
                     Authorization: `${localStorage.getItem("token")}`
                 }
             });
-            alert("Nota fiscal cancelada com sucesso.");
+            console.log(response.data);
+            setMensagem("Nota fiscal cancelada com sucesso.");
+            setOpenSnackbarSuccess(true);
         } catch (error) {
-            alert("Erro ao cancelar a nota fiscal. Por favor, tente novamente mais tarde.");
-            console.error("Erro ao cancelar nota fiscal:", error);
+            setMensagem("Erro ao cancelar a nota fiscal. Por favor, tente novamente mais tarde.");
+            setOpenSnackbarError(true);
+            // console.error("Erro ao cancelar nota fiscal:", error);
         } finally {
             // Atualiza a lista de notas fiscais após o cancelamento
             setOpen(false);
         }
     }
+
+    // Definindo o estado para a página atual e os itens por página
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Número de itens por página
+
+    // Calcular o índice do primeiro e do último item para a página atual
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+    // Obter os itens que devem ser exibidos na página atual
+    const currentItems = notasFiscais.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Calcular o número total de páginas
+    const totalPages = Math.ceil(notasFiscais.length / itemsPerPage);
+
+    // Função para ir para a página anterior
+    const goToPreviousPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    // Função para ir para a próxima página
+    const goToNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    // Função para ir a uma página específica
+    const goToPage = (page) => {
+        if (page >= 1 && page <= totalPages) setCurrentPage(page);
+    };
 
     return (
         <>
@@ -157,7 +194,7 @@ const NotasFiscaisEmitidas = () => {
                                 </Button>
                             </Grid> */}
                         </div>
-                                
+
                         {/* Tabela */}
                         <Card sx={{ borderRadius: "16px" }}>
                             <CardContent>
@@ -175,7 +212,7 @@ const NotasFiscaisEmitidas = () => {
                                         </TableHead>
                                         <TableBody>
                                             {notasFiscais.length > 0 ? (
-                                                notasFiscais.map((nota, index) => (
+                                                currentItems.map((nota, index) => (
                                                     <TableRow key={nota.idNota}>
                                                         <TableCell>{nota.idNota}</TableCell>
                                                         <TableCell>{nota.numeroNota || "---"}</TableCell>
@@ -186,7 +223,7 @@ const NotasFiscaisEmitidas = () => {
                                                             <div display="flex" alignItems="center" justifyContent="center">
                                                                 <Tooltip title="Download PDF">
                                                                     <IconButton
-                                                                    disabled={nota.caminhoPDF ? false : true}
+                                                                        disabled={nota.caminhoPDF ? false : true}
                                                                         sx={{ color: '#4caf50' }}
                                                                         onClick={() => {
                                                                             const apiBase = process.env.REACT_APP_API_URL;
@@ -226,6 +263,85 @@ const NotasFiscaisEmitidas = () => {
                                 </TableContainer>
                             </CardContent>
                         </Card>
+                        <div
+                            style={{
+                                margin: "20px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            {/* Botão Anterior */}
+                            <Button
+                                onClick={goToPreviousPage}
+                                disabled={currentPage === 1}
+                                style={{
+                                    backgroundColor: "#9C01B9",
+                                    borderRadius: "17px",
+                                    fontSize: "0.7rem",
+                                    color: "white",
+                                    fontWeight: 800,
+                                    border: "none",
+                                    transition: "0.3s ease",
+                                    margin: "0 5px", // Espaçamento entre os botões
+                                    padding: "6px 12px", // Ajuste de tamanho
+                                    '&:hover': {
+                                        backgroundColor: "#1EFF86",
+                                        boxShadow: "0 4px 10px #1EFF86",
+                                    },
+                                }}
+                            >
+                                Anterior
+                            </Button>
+
+                            {/* Botões de Página */}
+                            {[...Array(totalPages)].map((_, index) => (
+                                <Button
+                                    key={index}
+                                    onClick={() => goToPage(index + 1)}
+                                    style={{
+                                        backgroundColor: currentPage === index + 1 ? "#1EFF86" : "#9C01B9",
+                                        borderRadius: "17px",
+                                        fontSize: "0.8rem",
+                                        color: currentPage === index + 1 ? "black" : "white",
+                                        fontWeight: currentPage === index + 1 ? "bold" : "normal",
+                                        border: "none",
+                                        transition: "0.3s ease",
+                                        margin: "0 5px", // Espaçamento entre os botões
+                                        padding: "6px 8px", // Ajuste de tamanho
+                                        '&:hover': {
+                                            backgroundColor: "#1EFF86",
+                                            boxShadow: "0 4px 10px #1EFF86",
+                                        },
+                                    }}
+                                >
+                                    {index + 1}
+                                </Button>
+                            ))}
+
+                            {/* Botão Próxima */}
+                            <Button
+                                onClick={goToNextPage}
+                                disabled={currentPage === totalPages}
+                                style={{
+                                    backgroundColor: "#9C01B9",
+                                    borderRadius: "17px",
+                                    fontSize: "0.7rem",
+                                    color: "white",
+                                    fontWeight: 800,
+                                    border: "none",
+                                    transition: "0.3s ease",
+                                    margin: "0 5px", // Espaçamento entre os botões
+                                    padding: "6px 12px", // Ajuste de tamanho
+                                    '&:hover': {
+                                        backgroundColor: "#1EFF86",
+                                        boxShadow: "0 4px 10px #1EFF86",
+                                    },
+                                }}
+                            >
+                                Próxima
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -235,6 +351,12 @@ const NotasFiscaisEmitidas = () => {
                 notificacoes={notificacoes}
             />
             <Loading open={open} />
+            <AlertError openSnackbarError={openSnackbarError}
+                setOpenSnackbarError={setOpenSnackbarError}
+                mensagem={mensagem} />
+            <AlertSuccess openSnackbarSuccess={openSnackbarSuccess}
+                setOpenSnackbarSuccess={setOpenSnackbarSuccess}
+                mensagem={mensagem} />
         </>
     );
 };

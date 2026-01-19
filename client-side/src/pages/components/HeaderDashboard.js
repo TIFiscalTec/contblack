@@ -20,6 +20,7 @@ import Badge from '@mui/material/Badge';
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import HomeIcon from '@mui/icons-material/Home';
 
 function HeaderDashboard(props) {
 
@@ -81,6 +82,14 @@ function HeaderDashboard(props) {
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
             <List>
+                <ListItem disablePadding onClick={() => navigate("../Dashboard")}>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <HomeIcon sx={{ color: "black" }} />
+                        </ListItemIcon>
+                        <ListItemText primary={"Dashboard"} />
+                    </ListItemButton>
+                </ListItem>
                 <ListItem disablePadding onClick={() => navigate("../Dashboard/Faturas/Pendentes")}>
                     <ListItemButton>
                         <ListItemIcon>
@@ -140,7 +149,7 @@ function HeaderDashboard(props) {
                     {/* <div style={{ marginLeft: "16px", color: "#1EFF86" }}>
                         Contblack
                     </div> */}
-                    <img src="/assets/Logo_Contblack_FundoEscuro.png" alt="Contblack Logo" style={{ height: "40px", marginLeft: "16px" }} />
+                    <img src="/assets/Logo_Contblack_FundoEscuro.png" alt="Contblack Logo" style={{ height: "40px", marginLeft: "16px", cursor: "pointer" }} onClick={() => navigate("../Dashboard")} />
                 </div>
                 <div style={{ color: "white", width: "fit-content", minWidth: "100px" }}>
                     <Tooltip title="Ver perfil">

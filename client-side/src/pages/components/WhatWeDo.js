@@ -12,12 +12,12 @@ import { gerarLinkWhatsApp } from '../../utils/WhatsappLink';
 const WhatWeDo = (props) => {
     const navigate = useNavigate();
     const listAccordions = [
-        { title: "Cumpra os prazos e a lei", desc: "A gente anda com a lei meu chapa, mas você não precisa andar! Deixa com a contblack." },
-        { title: "Pagamento de funcionários", desc: "Organize o pagamento da galera e sócios em poucos cliques." },
-        { title: "Consultoria sem contabiliquês", desc: "Falamos sua língua e conhecemos a diversidade de negócios digitais." },
-        { title: "Abertura de empresas", desc: "Muito mais do abrir um MEI, guiamos nossos clientes sem burocracia." },
-        { title: "Envio de NFs", desc: "Nunca mais esqueça de enviar uma nota fiscal." },
-        { title: "Atendimento que fala sua língua", desc: "Sem contabiliquês, pra você decidir com segurança :)" },
+        { title: "Ao abrir meu CNPJ, posso receber pagamentos diretamente na minha conta bancária pessoal?", desc: "Não é recomendável receber pagamentos diretamente na sua conta bancária pessoal quando você tem um CNPJ. Embora, tecnicamente, seja possível, isso pode trazer alguns problemas. Ao abrir um CNPJ, você está separando suas finanças pessoais das finanças da sua empresa, o que ajuda a evitar complicações fiscais e contábeis no futuro." },
+        { title: "Por que é importante ter um endereço fiscal para a empresa?", desc: "Ter um endereço fiscal para a sua empresa é importante por várias razões, que envolvem questões legais, administrativas e até mesmo operacionais. Mas o ponto principal esta ligado a sua privacidade e segurança, uma vez que esse endereço será publico." },
+        { title: "Quais são os riscos de não declarar os impostos devidos?", desc: "Não declarar os impostos devidos pode trazer vários problemas. O principal risco é que a Receita Federal pode cobrar os valores atrasados, incluindo multas e juros, o que pode aumentar consideravelmente o valor devido. Além disso, ficar em dívida com o fisco pode resultar em bloqueio de contas bancárias, bloqueio de bens e até mesmo a inscrição da empresa no cadastro de inadimplentes, o que prejudica a reputação da empresa e dificulta a obtenção de crédito. Em casos mais graves, a empresa pode ser processada e, dependendo da situação, até seus sócios podem ser responsabilizados pessoalmente. É sempre melhor regularizar a situação antes que os problemas se agravem." },
+        { title: "Quais são os benefícios de declarar corretamente os impostos?", desc: "Maior possibilidade de obter empréstimos e financiamentos bancários, acesso a cartões de crédito, descontos em planos de saúde, seguros mais vantajosos e facilidade na aquisição de bens." },
+        { title: "Como funciona o processo de declaração de impostos para uma empresa?", desc: "Pode deixar que resolvemos quase tudo, você nos informa o quanto faturou no mês (o que você ganhou de dinheiro) e nós cuidamos de todo o resto!" },
+        { title: "Nunca declarei meus impostos. Ainda há como regularizar a situação?", desc: "Sim, ainda há como regularizar a situação. Se você nunca declarou seus impostos, é importante agir o quanto antes para evitar problemas maiores no futuro. O primeiro passo é procurar a Contblack para ajudá-lo(a) a calcular os impostos devidos e organizar toda a documentação necessária. Dependendo do tempo que passou desde a última declaração, pode ser necessário fazer a retificação das declarações ou pagar os impostos retroativamente, com as devidas correções, juros e multas." },
     ];
 
     return (
@@ -121,9 +121,9 @@ const WhatWeDo = (props) => {
                                         aria-controls={`panel${i}-content`}
                                         id={`panel${i}-header`}
                                     >
-                                        <Typography component="span">{obj.title}</Typography>
+                                        <Typography component="span" sx={{ fontSize: "0.8rem" }}>{obj.title}</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails>
+                                    <AccordionDetails sx={{ fontSize: "0.75rem" }}>
                                         {obj.desc}
                                     </AccordionDetails>
                                 </Accordion>

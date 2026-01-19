@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
 import { CircularProgress, Alert, Box, Typography } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { useLogin } from "../../contexts/LoginContext";
+import { useLogin } from "../../../../contexts/LoginContext";
+import HeaderDashboard from "../../../components/HeaderDashboard";
 
-const AssinarContrato = () => {
+const AssinarContratoEnderecoFiscal = () => {
 
     const navigate = useNavigate();
     const { login, loading } = useLogin();
     console.log("Login data:", login);
     const [contrato, setContrato] = useState(null);
     const [error, setError] = useState(null);
+    const [userActive, setUserActive] = useState(true);
+    const [openModalNotificacao, setOpenModalNotificacao] = useState(false);
     // const [assinando, setAssinando] = useState(false);
 
     useEffect(() => {
@@ -27,7 +30,7 @@ const AssinarContrato = () => {
             console.log("Fetching contrato for user:", login);
             try {
                 const response = await axios.post(
-                    `${process.env.REACT_APP_API_URL}/getContrato`,
+                    `${process.env.REACT_APP_API_URL}/getContratoEnderecoFiscal`,
                     { idUsuario: login?.idUsuario },
                     { headers: { Authorization: `${localStorage.getItem("token")}` } }
                 );
@@ -36,7 +39,7 @@ const AssinarContrato = () => {
 
                 if (response.data.data?.status === "signed") {
                     clearInterval(interval); // para o polling
-                    navigate("/carrinho");
+                    navigate("/Dashboard/CheckoutEnderecoFiscal");
                 } else {
                     setContrato(response.data.data || null);
                 }
@@ -78,9 +81,10 @@ const AssinarContrato = () => {
         );
     }
 
+
     return (
         <>
-            <Header active="cart" />
+            <HeaderDashboard userActive={userActive} setOpenModalNotificacao={setOpenModalNotificacao} notificacoes={0} />
             <Box sx={{ mt: 15, px: 2, minHeight: "100vh", marginBottom: 4 }}>
                 <Box
                     sx={{
@@ -93,10 +97,10 @@ const AssinarContrato = () => {
                     }}
                 >
                     <Typography variant="h5" gutterBottom>
-                        Quase lá
+                        Endereço Fiscal - Assinatura de Contrato
                     </Typography>
                     <Typography>
-                        Para darmos continuidade, solicitamos a gentileza de que o(a) Sr.(a) realize a assinatura do nosso contrato.
+                        O primeiro passo para obter o serviço de endereço fiscal é assinar o contrato digitalmente. Por favor, revise o documento abaixo e siga as instruções para completar a assinatura.
                     </Typography>
 
                     {error && (
@@ -116,18 +120,18 @@ const AssinarContrato = () => {
                         </Button>
                     </Box> */}
                     {contrato ? (
-                    <div style={{ width: "100%", height: "90vh", padding: "20px" }}>
-                        <iframe
-                            src={contrato ? contrato.sign_url : ""}
-                            title="Assinatura do Documento"
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                border: "none",
-                                borderRadius: "8px",
-                            }}
-                        />
-                    </div>
+                        <div style={{ width: "100%", height: "90vh", padding: "20px" }}>
+                            <iframe
+                                src={contrato ? contrato.sign_url : ""}
+                                title="Assinatura do Documento"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                }}
+                            />
+                        </div>
 
                     ) : (
                         <Box sx={{ mt: 10, textAlign: "center" }}>
@@ -141,4 +145,4 @@ const AssinarContrato = () => {
     );
 };
 
-export default AssinarContrato;
+export default AssinarContratoEnderecoFiscal;

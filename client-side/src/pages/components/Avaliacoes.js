@@ -15,6 +15,13 @@ export default function Avaliacoes() {
             comentario: "“Trabalho com eles a dois anos e são muito prestativos, sempre resolvem tudo bem rápido! Estou muito feliz e satisfeita com a equipe.”"
         },
         {
+            nome: <>Vanderson <b style={{ color: "#9C01B9" }}>Oliveira</b></>,
+            ocupation: "Desenvolvedor de Software",
+            imagem: "assets/dev.jpeg",
+            rating: 5,
+            comentario: "“A Contblack é uma contabilidade digital moderna, eficiente e extremamente confiável. O atendimento é ágil, claro e sempre disponível para tirar dúvidas, o que transmite muita segurança. A plataforma é intuitiva e facilita bastante a organização financeira e contábil. Os profissionais demonstram grande conhecimento e comprometimento com o sucesso do cliente. É uma excelente opção para quem busca praticidade sem abrir mão da qualidade.”"
+        },
+        {
             nome: <>Carolina <b style={{ color: "#9C01B9" }}>Dianas</b></>,
             ocupation: "Influencer/Produtora de Conteúdo",
             imagem: "assets/ismaila.png",
@@ -23,6 +30,13 @@ export default function Avaliacoes() {
                 <p>“Tinha muita dificuldade em encontrar uma contabilidade que atendesse exatamente ao que eu precisava, porque não entendo nada do assunto.</p>
                 A Contblack superou minhas expectativas: o suporte é praticamente 24 horas, tudo é entregue nos prazos e eu não preciso me preocupar com nada. Hoje sei que minha empresa está totalmente segura com eles.”
             </>
+        },
+        {
+            nome: <>Gabriela <b style={{ color: "#9C01B9" }}>Watanabe</b></>,
+            ocupation: "Designer Freelancer",
+            imagem: "assets/japinha.jpeg",
+            rating: 5,
+            comentario: "“A Contblack se destaca pela sua abordagem inovadora. Com uma plataforma fácil de usar e uma equipe altamente capacitada, ela torna a gestão contábil muito mais ágil e descomplicada. A transparência nos processos e o atendimento personalizado fazem toda a diferença. Uma excelente opção para quem busca modernidade e praticidade no dia a dia contábil.”"
         },
         {
             nome: <>Elis <b style={{ color: "#9C01B9" }}>Nebsniak</b></>,

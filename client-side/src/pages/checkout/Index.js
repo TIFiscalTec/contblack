@@ -86,8 +86,10 @@ const Checkout = () => {
     }, [navigate, token]);
 
 
-    const originalTotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+    const originalTotal = cartItems.reduce((sum, item) => sum + item.total, 0);
+    console.log("originalTotal", originalTotal);
     const total = discountApplied ? originalTotal - (originalTotal * (Number(discountApplied.valorDesconto) / 100)) : originalTotal;
+    console.log("total com desconto", total);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -240,15 +242,25 @@ const Checkout = () => {
                     <div>
                         <Typography variant="h6" gutterBottom>Resumo do Pedido</Typography>
                         {cartItems.map(item => (
-                            <div key={item.id} style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                padding: "10px 0",
-                                borderBottom: "1px solid #ccc"
-                            }}>
-                                <span>{item.title}</span>
-                                <span>R$ {item.price.toFixed(2).replace(".", ",")} / mês</span>
-                            </div>
+                            <>
+                                {item.enderecoFiscal && (
+                                    <div key={item.id} style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                    }}>
+                                        <span>Endereço Fiscal</span>
+                                        <span>R$ {item.enderecoFiscal.toFixed(2).replace(".", ",")} / mês</span>
+                                    </div>
+                                )}
+                                <div key={item.id} style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    borderBottom: "1px solid #ccc"
+                                }}>
+                                    <span>{item.title}</span>
+                                    <span>R$ {item.price.toFixed(2).replace(".", ",")} / mês</span>
+                                </div>
+                            </>
                         ))}
 
                         {/* Cupom de desconto */}
@@ -291,7 +303,7 @@ const Checkout = () => {
                             marginTop: "15px"
                         }}>
                             <span>Desconto:</span>
-                            <p style={{ color: "red" }}>- {FormatToBrl(cartItems[0]?.price * (Number(discountApplied.valorDesconto) / 100))}</p>
+                            <p style={{ color: "red" }}>- {FormatToBrl(cartItems[0]?.total * (Number(discountApplied.valorDesconto) / 100))}</p>
                         </div>
                         <div style={{
                             display: "flex",
